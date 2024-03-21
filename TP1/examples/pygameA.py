@@ -58,7 +58,7 @@ for e in range(1,estructuraEstanteria[2]):
 
 # Definir el tamaño de cada celda y la matriz de ejemplo
 # CELL_SIZE = WIDTH // 10
-tablero = [
+tab = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
     [0, 1, 1, 0, 0, 1, 1, 0, 0, 1],
@@ -71,10 +71,11 @@ tablero = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
-CELL_SIZE = WIDTH // len(tablero)
+
 
 # Función para dibujar el tablero
-def draw_board():
+def draw_board(tablero):
+    CELL_SIZE = WIDTH // len(tablero)
     for y in range(len(tablero)):
         for x in range(len(tablero[0])):
             color = BLACK if tablero[y][x] == 0 else BLUE
@@ -94,7 +95,7 @@ def main():
         
         # Dibujar el tablero
         screen.fill(WHITE)  # Rellenar la pantalla con blanco
-        draw_board()
+        draw_board(tab)
         
         # Actualizar la pantalla
         pygame.display.flip()
