@@ -1,0 +1,6 @@
+IA_II/
+#Excluir los temporarios
+__pycache__
+tempCodeRunnerFile.py
+#Excluir las pre configuracuibes de VScode
+.vscode
