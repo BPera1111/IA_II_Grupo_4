@@ -6,7 +6,7 @@
     # si es el objetifo: fin
     # sinó es el objetivo: el nodo seleccionado pasa a ser el nodo actual y se repite desde el punto (3)
 
-import draw
+
 
 
 def tablero(): #retorna la matriz (tablero)
