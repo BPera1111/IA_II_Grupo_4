@@ -22,7 +22,7 @@ class tablero:
 
         # Inicializar una lista vacía para contener la matriz
         self.matriz = []
-
+        x=0
         # Generar la matriz con las características requeridas
         for i in range(self.filas):
             fila = []
@@ -31,12 +31,16 @@ class tablero:
                 if i % 5 == 0 or i == 0 or j == 0 or j % 3 == 0:
                     fila.append(0)
                 else:
-                    fila.append(1)
+                    x+=1
+                    fila.append(x)
             self.matriz.append(fila)
+        
+        
         
     def actualiza_tablero(self, x, y, valor):
         self.matriz[x][y] = valor
         draw.actualiza_pantalla(self.matriz)
+        
 
 
 
@@ -48,7 +52,7 @@ class Nodo:
         self.f = f
         self.h = h
         self.padre = None
-        self.hijo = None
+        
 
      
     def encuentra_vecinos(self, matriz, objetivo,actual):
@@ -61,27 +65,32 @@ class Nodo:
             h = abs(objetivo.x - (actual.x - 1)) + abs(objetivo.y - (actual.y))
             f=h+actual.g+1
             vecino1 = Nodo(actual.x - 1, actual.y, h, actual.g,f,)
+            vecino1.padre=actual
             lista_vecinos.append(vecino1)
 
         # Verificar vecino inferior
-        if actual.x < filas - 1 and matriz[actual.x + 1][actual.y] == 0:
+        if actual.x < filas - 1 and matriz.matriz[actual.x + 1][actual.y] == 0:
             h = abs(objetivo.x - (actual.x + 1)) + abs(objetivo.y - actual.y)
             f=h+actual.g+1
             vecino2 = Nodo(actual.x + 1, actual.y, h, actual.g,f)
+            vecino2.padre = actual
             lista_vecinos.append(vecino2)
 
         # Verificar vecino izquierdo
-        if actual.y > 0 and matriz[actual.x][actual.y - 1] == 0:
+        if actual.y > 0 and matriz.matriz[actual.x][actual.y - 1] == 0:
             h = abs(objetivo.x - (actual.x)) + abs(objetivo.y - (actual.y - 1))
             f=h+actual.g+1
             vecino3 = Nodo(actual.x, actual.y - 1, h, actual.g,f)
+            vecino3.padre=actual
             lista_vecinos.append(vecino3)
 
+
         # Verificar vecino derecho
-        if actual.y < columnas - 1 and matriz[actual.x][actual.y + 1] == 0:
+        if actual.y < columnas - 1 and matriz.matriz[actual.x][actual.y + 1] == 0:
             h = abs(objetivo.x - (actual.x)) + abs(objetivo.y - (actual.y + 1))
             f=h+actual.g+1
             vecino4 = Nodo(actual.x, actual.y + 1, h, actual.g,f)
+            vecino4.padre=actual
             lista_vecinos.append(vecino4)
         
         # lista_vecinos.sort(key=lambda x: x.f)
@@ -117,6 +126,7 @@ class estrella(Nodo):
 
     def __init__(self, mapa, nodo_inicial, nodo_objetivo):
         self.mapa = mapa.matriz.copy()
+        self.tab = mapa
         self.nodo_inicial = nodo_inicial
         self.nodo_objetivo = nodo_objetivo
 
@@ -126,23 +136,39 @@ class estrella(Nodo):
         lista_cerrados = ListaCerrados()
         # Agrega el nodo inicial a la lista de abiertos
         lista_abiertos.agregar(nodo_inicial)
-        
         while True:
             # Obtiene el nodo con la distancia estimada más baja
             nodo_actual = lista_abiertos.obtener_nodo_mas_cercano()
             lista_abiertos.remover(nodo_actual)
             lista_cerrados.agregar(nodo_actual)
-            print("\nLista abierta: ",lista_abiertos.nodos)
-            print("\nLista cerrada: ",lista_cerrados.nodos)
+            #agrego el 3 para los nodos de la lista cerrada
+            self.tab.actualiza_tablero(nodo_actual.x, nodo_actual.y,"g")
+
             # Si el nodo actual es el objetivo, termina el algoritmo
             if nodo_actual.x == nodo_objetivo.x and nodo_actual.y ==nodo_objetivo.y:
-                print("anashe")
-                print(nodo_actual.x)
-                print(nodo_actual.y)
+                print("\n\n   anashe")
+                print("\nLlegamos a: "+ str(nodo_actual.x)+","+str(nodo_actual.y))
+                print("\n\nTamaño de la lista abierta: ",len(lista_abiertos.nodos))
+                print("Tamaño de la lista cerrada: ",len(set(lista_cerrados.nodos)))
+                print("Lista abierta:")
+                
+                for i, nodo in enumerate(lista_abiertos.nodos):
+                    try:
+                        print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre:  {nodo.padre.x},{nodo.padre.y}")
+                    except Exception:
+                        print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre: None")
+
+                print("Lista cerrada:")
+                for i, nodo in enumerate(lista_cerrados.nodos):
+                    try:
+                        print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre: {nodo.padre.x},{nodo.padre.y}")
+                    except Exception:
+                        print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre: None")
+                              
                 # print("Lista abierta: ",lista_abiertos.nodos)
                 # print("separaion")
                 # print("Lista cerrada: ",lista_cerrados.nodos)
-                break
+                return lista_cerrados.nodos
                 #return nodo_actual.padre
             # Expande el nodo actual
             for nodo_vecino in self.encuentra_vecinos(mapa, nodo_objetivo, nodo_actual):
@@ -152,6 +178,7 @@ class estrella(Nodo):
                 if not lista_cerrados.contiene(nodo_vecino):
                     # Agrega el nodo vecino a la lista de abiertos
                     lista_abiertos.agregar(nodo_vecino)
+                    self.tab.actualiza_tablero(nodo_vecino.x, nodo_vecino.y, "r")
                     # Actualiza la distancia estimada del nodo vecino
                     nodo_vecino.g = costo_estimado
 
@@ -162,20 +189,58 @@ import draw
                     
 def main():
     tab = tablero(21, 19)
-    print(tab.matriz)
+    
     draw.mostrar_tablero(tab.matriz)
     
     
     inicio = input("Ingrese la posición inicial (x, y): ")
-    objetivo = input("Ingrese la posición objetivo (x, y): ")
+    objetivo = int(input("Ingrese la posición objetivo (1-192): "))
     inicio = [int(coord) for coord in inicio.split(",")]
-    objetivo = [int(coord) for coord in objetivo.split(",")]
-    h = abs(objetivo[0] - inicio[0]) + abs(objetivo[1] - inicio[1])
+
+    #lagura copilot
+
+    # Buscar el valor 192 en la lista tab.matriz y devolver su posición
+    posicion = None
+    for i, fila in enumerate(tab.matriz):
+        if objetivo in fila:
+            obj = [i,fila.index(objetivo)]
+            if tab.matriz[i][fila.index(objetivo+1)]==0:
+                posicion = (i, fila.index(objetivo)+1)
+                print("derecha")
+            else:
+                posicion = (i, fila.index(objetivo)-1)
+                print("izquierda")
+            break
+
+
+    print("Posición del valor:", posicion)
+    
+    #fin del laguro de copilot
+
+    #objetivo = [int(coord) for coord in objetivo.split(",")]
+    h = abs(posicion[0] - inicio[0]) + abs(posicion[1] - inicio[1])
     nodo_inicial = Nodo(inicio[0], inicio[1], h, 0, h)
-    nodo_objetivo = Nodo(objetivo[0], objetivo[1], h ,0, h)
+    nodo_objetivo = Nodo(posicion[0], posicion[1], h ,0, h)
+    tab.actualiza_tablero(obj[0],obj[1], "w")
     estre = estrella(tab, nodo_inicial, nodo_objetivo)
-    estre.busqueda_a_estrella(tab, nodo_inicial, nodo_objetivo) 
+    lista_cerrada=estre.busqueda_a_estrella(tab, nodo_inicial, nodo_objetivo) 
+    final=lista_cerrada[-1]
+    recorrido = []
+    x = True
+    while x:
+        if final.padre == None:x = False
+        
+        print("Posición: ",final.x,final.y,final.g)
+        recorrido.append([final.x,final.y,final.g])
+        # tab.actualiza_tablero(final.x, final.y, 5)
+        final = final.padre
+    
+    for i in reversed(recorrido):
+    
+        tab.actualiza_tablero(i[0], i[1], "c")
+    
 
 if __name__ == "__main__":
+    
     main()              
                     
