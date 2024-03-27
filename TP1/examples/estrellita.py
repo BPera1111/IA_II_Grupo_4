@@ -6,28 +6,39 @@
     # si es el objetifo: fin
     # sinó es el objetivo: el nodo seleccionado pasa a ser el nodo actual y se repite desde el punto (3)
 
-import numpy as np
-import time 
+class tablero:
 
-def tablero(): #retorna la matriz (tablero)
-    # Definir las dimensiones de la matriz
-    filas = 21  # Puedes cambiar este valor según tus necesidades
-    columnas = 19  # Puedes cambiar este valor según tus necesidades
+    def __init__(self,filas,columnas):
+        self.filas = filas
+        self.columnas = columnas
+        self.matriz = None
+        self.crear_tablero()
 
-    # Inicializar una lista vacía para contener la matriz
-    matriz = []
 
-    # Generar la matriz con las características requeridas
-    for i in range(filas):
-        fila = []
-        for j in range(columnas):
-            # Verificar si la fila o la columna son múltiplos de 4 (para filas y columnas basadas en 0)
-            if i % 5 == 0 or i == 0 or j == 0 or j % 3 == 0:
-                fila.append(0)
-            else:
-                fila.append(1)
-        matriz.append(fila)
-    return matriz
+    def crear_tablero(self): #retorna la matriz (tablero)
+        # Definir las dimensiones de la matriz
+        # filas = 21  # Puedes cambiar este valor según tus necesidades
+        # columnas = 19  # Puedes cambiar este valor según tus necesidades
+
+        # Inicializar una lista vacía para contener la matriz
+        self.matriz = []
+
+        # Generar la matriz con las características requeridas
+        for i in range(self.filas):
+            fila = []
+            for j in range(self.columnas):
+                # Verificar si la fila o la columna son múltiplos de 4 (para filas y columnas basadas en 0)
+                if i % 5 == 0 or i == 0 or j == 0 or j % 3 == 0:
+                    fila.append(0)
+                else:
+                    fila.append(1)
+            self.matriz.append(fila)
+        
+    def actualiza_tablero(self, x, y, valor):
+        self.matriz[x][y] = valor
+        draw.actualiza_pantalla(self.matriz)
+
+
 
 class Nodo:
     def __init__(self, x, y, h, g, f):
@@ -41,12 +52,12 @@ class Nodo:
 
      
     def encuentra_vecinos(self, matriz, objetivo,actual):
-        filas = len(matriz)
-        columnas = len(matriz[0])
-        lista_vecinos = []
+        filas = len(matriz.matriz)
+        columnas = len(matriz.matriz[0])
+        lista_vecinos = [] #mostro a todas las matriz hay que ponerles el .matriz para que entren al atributo del objeto
 
         # Verificar vecino superior
-        if actual.x > 0 and matriz[actual.x - 1][actual.y] == 0:
+        if actual.x > 0 and matriz.matriz[actual.x - 1][actual.y] == 0:
             h = abs(objetivo.x - (actual.x - 1)) + abs(objetivo.y - (actual.y))
             f=h+actual.g+1
             vecino1 = Nodo(actual.x - 1, actual.y, h, actual.g,f,)
@@ -105,7 +116,7 @@ class ListaCerrados:
 class estrella(Nodo):
 
     def __init__(self, mapa, nodo_inicial, nodo_objetivo):
-        self.mapa = mapa
+        self.mapa = mapa.matriz.copy()
         self.nodo_inicial = nodo_inicial
         self.nodo_objetivo = nodo_objetivo
 
@@ -121,6 +132,8 @@ class estrella(Nodo):
             nodo_actual = lista_abiertos.obtener_nodo_mas_cercano()
             lista_abiertos.remover(nodo_actual)
             lista_cerrados.agregar(nodo_actual)
+            print("\nLista abierta: ",lista_abiertos.nodos)
+            print("\nLista cerrada: ",lista_cerrados.nodos)
             # Si el nodo actual es el objetivo, termina el algoritmo
             if nodo_actual.x == nodo_objetivo.x and nodo_actual.y ==nodo_objetivo.y:
                 print("anashe")
@@ -145,9 +158,13 @@ class estrella(Nodo):
           
 
 # Zona de pruebas
+import draw
                     
 def main():
-    tab = tablero()
+    tab = tablero(21, 19)
+    print(tab.matriz)
+    draw.mostrar_tablero(tab.matriz)
+    
     
     inicio = input("Ingrese la posición inicial (x, y): ")
     objetivo = input("Ingrese la posición objetivo (x, y): ")
