@@ -1,6 +1,28 @@
 import pygame
 import sys
 
+
+filas = 21  # Puedes cambiar este valor según tus necesidades
+columnas = 19  # Puedes cambiar este valor según tus necesidades
+
+# Inicializar una lista vacía para contener la matriz
+matriz = []
+
+# Generar la matriz con las características requeridas
+for i in range(filas):
+    fila = []
+    for j in range(columnas):
+        # Verificar si la fila o la columna son múltiplos de 4 (para filas y columnas basadas en 0)
+        if i % 5 == 0 or i == 0 or j == 0 or j % 3 == 0:
+            fila.append(0)
+        else:
+            fila.append(1)
+    matriz.append(fila)
+
+# Imprimir la matriz con formato
+for fila in matriz:
+    print(fila)
+
 # Inicializar pygame
 pygame.init()
 
@@ -13,7 +35,7 @@ BLUE = (0, 0, 255)
 
 # Configurar el tamaño de la pantalla
 ANCHO=40
-COLUMNAS=8
+COLUMNAS=19
 FILAS=16
 WIDTH, HEIGHT = ANCHO*COLUMNAS, ANCHO*FILAS
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -21,30 +43,11 @@ pygame.display.set_caption("Tablero de Búsqueda")
 
 # Definir el tamaño de cada celda y la matriz de ejemplo
 CELL_SIZE = ANCHO
-tablero = [
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 1, 2, 0, 0, 25, 26, 0],
-    [0, 3, 4, 0, 0, 27, 28, 0],
-    [0, 5, 6, 0, 0, 29, 30, 0],
-    [0, 7, 8, 0, 0, 31, 32, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 9, 10, 0, 0, 33, 34, 0],
-    [0, 11, 12, 0, 0, 35, 36, 0],
-    [0, 13, 14, 0, 0, 37, 38, 0],
-    [0, 15, 16, 0, 0, 39, 40, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 17, 18, 0, 0, 41, 42, 0],
-    [0, 19, 20, 0, 0, 43, 44, 0],
-    [0, 21, 22, 0, 0, 45, 46, 0],
-    [0, 23, 24, 0, 0, 47, 48, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0]
-]
-
 # Función para dibujar el tablero
 def draw_board():
-    for y in range(16):
-        for x in range(8):
-            color = BLACK if tablero[y][x] == 0 else BLUE
+    for y in range(FILAS):
+        for x in range(COLUMNAS):
+            color = BLACK if matriz[y][x] == 0 else WHITE
             rect = pygame.Rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
             pygame.draw.rect(screen, color, rect)
             pygame.draw.rect(screen, WHITE, rect, 1)  # Esta línea dibuja un rectángulo blanco alrededor de cada celda
