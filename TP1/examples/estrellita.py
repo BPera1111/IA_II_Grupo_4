@@ -235,7 +235,7 @@ def main():
         # tab.actualiza_tablero(final.x, final.y, 5)
         final = final.padre
     
-    for i in reversed(recorrido):pirum
+    for i in reversed(recorrido):
     
         tab.actualiza_tablero(i[0], i[1], "c")
     
