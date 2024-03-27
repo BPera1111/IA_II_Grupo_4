@@ -41,35 +41,22 @@ class ListaCerrados:
 def busqueda_a_estrella(mapa, nodo_inicial, nodo_objetivo):
     lista_abiertos = ListaAbiertos()
     lista_cerrados = ListaCerrados()
-
     # Agrega el nodo inicial a la lista de abiertos
-
     lista_abiertos.agregar(nodo_inicial)
 
     while True:
         # Obtiene el nodo con la distancia estimada más baja
-
         nodo_actual = lista_abiertos.obtener_nodo_mas_cercano()
-
         # Si el nodo actual es el objetivo, termina el algoritmo
-
         if nodo_actual == nodo_objetivo:
             return nodo_actual.padre
-
         # Expande el nodo actual
-
         for nodo_vecino in mapa.obtener_vecinos(nodo_actual):
             # Calcula la distancia estimada hasta el nodo objetivo
-
             costo_estimado = nodo_actual.costo + nodo_vecino.costo
-
             # Si el nodo vecino no está en la lista de cerrados
-
             if not lista_cerrados.contiene(nodo_vecino):
                 # Agrega el nodo vecino a la lista de abiertos
-
                 lista_abiertos.agregar(nodo_vecino)
-
                 # Actualiza la distancia estimada del nodo vecino
-
                 nodo_vecino.costo = costo_estimado
