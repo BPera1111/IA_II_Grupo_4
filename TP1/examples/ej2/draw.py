@@ -15,13 +15,16 @@ CIAN = (0, 255, 255)
 color_dict = {0: BLACK, "r": RED, "g": GREEN, "w": WHITE, "c": CIAN}
 
 # Configurar el tamaño de la pantalla
-WIDTH, HEIGHT = 800, 800
+CELL_SIZE = 40
+FILAS=21
+COLUMNAS=19
+WIDTH, HEIGHT = COLUMNAS*CELL_SIZE, FILAS*CELL_SIZE
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tablero de Búsqueda")
 
 # Función para dibujar el tablero
 def draw_board(tablero):
-    CELL_SIZE = WIDTH // len(tablero)
+    #CELL_SIZE = WIDTH // len(tablero)
     for y in range(len(tablero)):
         for x in range(len(tablero[0])):
             color = color_dict.get(tablero[y][x],BLUE)
