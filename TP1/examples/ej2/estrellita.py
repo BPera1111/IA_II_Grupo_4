@@ -27,7 +27,8 @@ class agente:
         for i, fila in enumerate(tab.matriz):
             if objetivo in fila:
                 obj = [i,fila.index(objetivo)]
-                if tab.matriz[i][fila.index(objetivo)+1]==(0 or 'g' or 'r'):
+#                if tab.matriz[i][fila.index(objetivo)+1]==(0 or 'g' or 'r'):
+                if tab.matriz[i][fila.index(objetivo)+1] in [0,'g','r']:
                     self.objetivo = (i, fila.index(objetivo)+1)
                     print("derecha")
                 else:
