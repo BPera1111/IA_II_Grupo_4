@@ -44,7 +44,7 @@ class agente:
         x = True
         while x:
             if final.padre == None:x = False #si el nodo no tiene padre, termina
-            print("Posición: ",final.x,final.y,final.g) 
+            #print("Posición: ",final.x,final.y,final.g) 
             recorrido.append([final.x,final.y,final.g]) #agrega la posicion del nodo a la lista de recorrido
             final = final.padre #se mueve al nodo padre
         self.listacerrada=recorrido
