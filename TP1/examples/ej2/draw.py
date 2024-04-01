@@ -12,7 +12,10 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 CIAN = (0, 255, 255)
-color_dict = {0: BLACK, "r": RED, "g": GREEN, "w": WHITE, "c": CIAN}
+algo = (255, 0, 255)
+otro = (255, 255, 0)
+
+color_dict = {0: BLACK, "r": RED, "g": GREEN, "w": WHITE, "a0": CIAN, "a1": algo, "a2": otro}
 
 # Configurar el tamaño de la pantalla
 CELL_SIZE = 40
@@ -24,7 +27,6 @@ pygame.display.set_caption("Tablero de Búsqueda")
 
 # Función para dibujar el tablero
 def draw_board(tablero):
-    #CELL_SIZE = WIDTH // len(tablero)
     for y in range(len(tablero)):
         for x in range(len(tablero[0])):
             color = color_dict.get(tablero[y][x],BLUE)
@@ -43,7 +45,6 @@ def muestra(tablero):
                 running = False
         
         # Dibujar el tablero
-        # screen.fill(WHITE)  # Rellenar la pantalla con blanco
         draw_board(tablero)
         
         # Actualizar la pantalla
@@ -60,6 +61,5 @@ def mostrar_tablero(tablero):
 
 # Función para actualizar la pantalla
 def actualiza_pantalla(nuevo_tablero):
-    # screen.fill(WHITE)  # Rellenar la pantalla con blanco
     draw_board(nuevo_tablero)
     pygame.display.flip()

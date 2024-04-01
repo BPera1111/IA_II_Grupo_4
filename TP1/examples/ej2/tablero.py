@@ -10,10 +10,6 @@ class tablero:
 
 
     def crear_tablero(self): #retorna la matriz (tablero)
-        # Definir las dimensiones de la matriz
-        # filas = 21  # Puedes cambiar este valor según tus necesidades
-        # columnas = 19  # Puedes cambiar este valor según tus necesidades
-
         # Inicializar una lista vacía para contener la matriz
         self.matriz = []
         x=0
