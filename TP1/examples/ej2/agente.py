@@ -38,7 +38,6 @@ class agente:
     def ver_lista_cerrada(self,otro_agente):
         for i in otro_agente.listacerrada:
             self.historia.append(i)#agrega la historia de los agentes anteriores
-        #self.historia.append(otro_agente.listacerrada)#agrega la historia de los agentes anteriores
 
     def armar_recorrido(self):
         final=self.listacerrada[-1]#obtiene el ultimo nodo de la lista cerrada, arrancando de atras para adelante
