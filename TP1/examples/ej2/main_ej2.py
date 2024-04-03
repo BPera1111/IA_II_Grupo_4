@@ -10,7 +10,8 @@ def main():
     for i in range(cant_agentes):
         agentes["a"+str(i)] = agente.agente(tab, "a"+str(i))#crea los agentes
         if i>0:
-            for j in range(i-1):
+            for j in range(i):
+                print("Agente ",j)
                 agentes["a"+str(i)].ver_lista_cerrada(agentes["a"+str(j)])#arma la historia de los agentes anteriores para que no se crucen
         agentes["a"+str(i)].busqueda(tab)#busca el camino
         agentes["a"+str(i)].armar_recorrido()#arma el recorrido

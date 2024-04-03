@@ -77,18 +77,28 @@ class estrella(Nodo):
                 for casilla in historia:
 
                     if temporal.x == casilla[0] and temporal.y == casilla[1] and temporal.g == casilla[2]:
-                        #esto permite que se quede quieto el agente por un turno
-                        lista_abiertos.remover(temporal)#removemos el nodo y lo actualizamos con un g mayor
-                        temporal.g+=1
-                        temporal.f+=1
-                        padretemp=copy.copy(temporal.padre)#creamos un padre nuevo para que no se modifique el padre viejo
-                        padretemp.g+=1
-                        padretemp.f+=1
-                        padretemp.padre=temporal.padre#le asignamos el padre viejo al padre nuevo ya que nos quedamos quietos
-                        temporal.padre=padretemp#le asignamos el padre nuevo al nodo temporal
-                        lista_cerrados.agregar(padretemp)
-                        lista_abiertos.agregar(temporal)
-                        check=True
+                        #esto permite que se quede quieto el agente por un turno siendo el primer if para el caso especial de que el agente se quede quieto en la posicion inicial
+                        if temporal.padre==None:
+                            padretemp=copy.copy(temporal)
+                            lista_abiertos.remover(temporal)
+                            temporal.g+=1
+                            temporal.f+=1
+                            temporal.padre=padretemp
+                            lista_cerrados.agregar(padretemp)
+                            lista_abiertos.agregar(temporal)
+                            check=True
+                        else:
+                            lista_abiertos.remover(temporal)#removemos el nodo y lo actualizamos con un g mayor
+                            temporal.g+=1
+                            temporal.f+=1
+                            padretemp=copy.copy(temporal.padre)#creamos un padre nuevo para que no se modifique el padre viejo
+                            padretemp.g+=1
+                            padretemp.f+=1
+                            padretemp.padre=temporal.padre#le asignamos el padre viejo al padre nuevo ya que nos quedamos quietos
+                            temporal.padre=padretemp#le asignamos el padre nuevo al nodo temporal
+                            lista_cerrados.agregar(padretemp)
+                            lista_abiertos.agregar(temporal)
+                            check=True
                     
                     if temporal.x == casilla[0] and temporal.y == casilla[1] and temporal.g == casilla[2]+1 and temporal.padre.x == historia[i-1][0] and temporal.padre.y == historia[i-1][1]:
                         #esto hace que si se fuesen a cruzar los agentes, el segundo se busque otro camino
