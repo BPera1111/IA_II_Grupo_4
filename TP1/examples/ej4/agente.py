@@ -12,11 +12,10 @@ class agente:
     def buscar_casilla(self,tab,objetivo):
         for i, fila in enumerate(tab.matriz):
             if objetivo in fila:
-                obj = [i,fila.index(objetivo)]
                 if tab.matriz[i][fila.index(objetivo)+1] in [0,'g','r']:
-                    casilla = (i, fila.index(objetivo)+1)
+                    casilla = [i, fila.index(objetivo)+1]
                 else:
-                    casilla = (i, fila.index(objetivo)-1)
+                    casilla = [i, fila.index(objetivo)-1]
                 return casilla
 
 
@@ -53,7 +52,7 @@ class agente:
         estre = Nodo.estrella(tablero, nodo_inicial, nodo_objetivo)#creacion del objeto estrella 
         lista_cerrada=estre.busqueda_a_estrella(tablero, nodo_inicial, nodo_objetivo,self.historia)#busqueda del camino
         self.listacerrada=lista_cerrada
-        return lista_cerrada[0].g
+        return lista_cerrada[-1].g
 
 
     def ver_lista_cerrada(self,otro_agente):

@@ -1,4 +1,4 @@
-import draw as draw
+import random
 
 class tablero:
 
@@ -12,7 +12,7 @@ class tablero:
     def crear_tablero(self): #retorna la matriz (tablero)
         # Inicializar una lista vacía para contener la matriz
         self.matriz = []
-        x=0
+        valores_posibles=list(range(1,193))
         # Generar la matriz con las características requeridas
         for i in range(self.filas):
             fila = []
@@ -21,12 +21,8 @@ class tablero:
                 if i % 5 == 0 or i == 0 or j == 0 or j % 3 == 0:
                     fila.append(0)
                 else:
-                    x+=1
-                    fila.append(x)
+                    valor_aleatorio=random.choice(valores_posibles)
+                    fila.append(valor_aleatorio)
+                    valores_posibles.remove(valor_aleatorio)
             self.matriz.append(fila)
         
-        
-        
-    def actualiza_tablero(self, x, y, valor):
-        self.matriz[x][y] = valor
-        draw.actualiza_pantalla(self.matriz)

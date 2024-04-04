@@ -114,12 +114,12 @@ class estrella(Nodo):
                 nodo_actual = lista_abiertos.obtener_nodo_mas_cercano()#obtenemos el nodo con menor f
                 lista_abiertos.remover(nodo_actual)#lo removemos de la lista de abiertos
                 lista_cerrados.agregar(nodo_actual)#lo agregamos a la lista cerrada
-                mapa.actualiza_tablero(nodo_actual.x, nodo_actual.y,"g")#actualizamos el tablero con el nodo al que nos movemos
+                #mapa.actualiza_tablero(nodo_actual.x, nodo_actual.y,"g")#actualizamos el tablero con el nodo al que nos movemos
                 # Si el nodo actual es el objetivo, termina el algoritmo
                 if nodo_actual.x == nodo_objetivo.x and nodo_actual.y ==nodo_objetivo.y:
-                    print("\nLlegamos a: "+ str(nodo_actual.x)+","+str(nodo_actual.y))
-                    print("\n\nTamaño de la lista abierta: ",len(lista_abiertos.nodos))
-                    print("Tamaño de la lista cerrada: ",len(set(lista_cerrados.nodos)))
+                    #print("\nLlegamos a: "+ str(nodo_actual.x)+","+str(nodo_actual.y))
+                    #print("\n\nTamaño de la lista abierta: ",len(lista_abiertos.nodos))
+                    #print("Tamaño de la lista cerrada: ",len(set(lista_cerrados.nodos)))
                     '''
                     print("Lista abierta:")
                     
@@ -144,7 +144,7 @@ class estrella(Nodo):
                     # Si el nodo vecino no está en la lista de cerrados, lo agrega a la lista de abiertos
                     if not lista_abiertos.contiene(nodo_vecino) and not lista_cerrados.contiene(nodo_vecino):
                         lista_abiertos.agregar(nodo_vecino)
-                        self.mapa.actualiza_tablero(nodo_vecino.x, nodo_vecino.y, "r")#actualizamos el tablero con el nodo vecino de color rojo
+                        #self.mapa.actualiza_tablero(nodo_vecino.x, nodo_vecino.y, "r")#actualizamos el tablero con el nodo vecino de color rojo
 
                     
                     
