@@ -51,7 +51,7 @@ class agente:
         self.listacerrada=recorrido
     
     def dibujar_camino(self,tab):
-        for i in self.listacerrada:
+        for i in reversed(self.listacerrada): 
             tab.actualiza_tablero(i[0], i[1], self.num_agente)
 
                     

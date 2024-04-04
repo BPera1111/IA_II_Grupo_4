@@ -9,7 +9,7 @@ class tablero:
         self.crear_tablero()
 
 
-    def crear_tablero(self): #retorna la matriz (tablero)
+    def crear_tablero(self): #crea el tablero y asigna valor de estanteria
         # Inicializar una lista vacía para contener la matriz
         self.matriz = []
         x=0
@@ -27,6 +27,6 @@ class tablero:
         
         
         
-    def actualiza_tablero(self, x, y, valor):
+    def actualiza_tablero(self, x, y, valor): #actualiza el tablero con función de draw.py
         self.matriz[x][y] = valor
         draw.actualiza_pantalla(self.matriz)

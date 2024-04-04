@@ -13,7 +13,7 @@ class Nodo:
         
 
      
-    def encuentra_vecinos(self, matriz, objetivo,actual):
+    def encuentra_vecinos(self, matriz, objetivo,actual): #encuentra los vecinos del nodo actual
         filas = len(matriz.matriz)
         columnas = len(matriz.matriz[0])
         lista_vecinos = [] 
@@ -52,10 +52,9 @@ class Nodo:
             lista_vecinos.append(vecino4)
 
         return lista_vecinos
-        
+#utilizando la heuristica con distancia de manhattan
 
-
-class estrella(Nodo):
+class estrella(Nodo): #clase estrella que hereda de nodo para poder utilizar la heuristica
 
     def __init__(self, mapa, nodo_inicial, nodo_objetivo):
         self.mapa = mapa
@@ -120,22 +119,7 @@ class estrella(Nodo):
                     print("\nLlegamos a: "+ str(nodo_actual.x)+","+str(nodo_actual.y))
                     print("\n\nTamaño de la lista abierta: ",len(lista_abiertos.nodos))
                     print("Tamaño de la lista cerrada: ",len(set(lista_cerrados.nodos)))
-                    '''
-                    print("Lista abierta:")
                     
-                    for i, nodo in enumerate(lista_abiertos.nodos):
-                        try:
-                            print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre:  {nodo.padre.x},{nodo.padre.y}")
-                        except Exception:
-                            print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre: None")
-
-                    print("Lista cerrada:")
-                    for i, nodo in enumerate(lista_cerrados.nodos):
-                        try:
-                            print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre: {nodo.padre.x},{nodo.padre.y}")
-                        except Exception:
-                            print(f"Posición {i+1}: X: {nodo.x}, Y: {nodo.y}, G: {nodo.g}, F: {nodo.f}, H: {nodo.h}, Padre: None")
-                    '''
                     return lista_cerrados.nodos
                 # Expande el nodo actual
                 for nodo_vecino in self.encuentra_vecinos(self.tab, nodo_objetivo, nodo_actual):

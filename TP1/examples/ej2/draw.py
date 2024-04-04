@@ -34,7 +34,6 @@ def draw_board(tablero):
             pygame.draw.rect(screen, color, rect)
             pygame.draw.rect(screen, WHITE, rect, 1)  # Esta línea dibuja un rectángulo blanco alrededor de cada celda
 
-
 # Función principal
 def muestra(tablero):
     running = True
