@@ -161,8 +161,16 @@ for _ in range(num_generaciones):
         print("Error en la generación", _, ":", e)
         continue
 # Selección del mejor individuo
+fitness_suma=np.zeros(len(tableros))
 for i in range(len(productos)):
-    mejor_individuo = tableros[np.argmax([evaluar_almacen(productos[i],individuo) for individuo in tableros])]
+    fitness=[evaluar_almacen(productos[i],individuo) for individuo in tableros]
+    fitness_suma=np.array(fitness)+fitness_suma   
+print(fitness_suma)
+mejor_individuo = tableros[np.argmin(fitness_suma)]
+for i in range(len(productos)):
+    prueba=evaluar_almacen(productos[i],mejor_individuo)
+    print("Fitness del mejor individuo para el producto",i+1,":",prueba)
+#mejor_individuo = tableros[np.argmax([evaluar_almacen(productos,individuo) for individuo in tableros])]
 #print mejor individuo con formato
 for i in range(mejor_individuo.filas):
     print(mejor_individuo.matriz[i])    
