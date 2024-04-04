@@ -61,5 +61,6 @@ def mostrar_tablero(tablero):
 
 # Función para actualizar la pantalla
 def actualiza_pantalla(nuevo_tablero):
+    pygame.time.delay(50)
     draw_board(nuevo_tablero)
     pygame.display.flip()
