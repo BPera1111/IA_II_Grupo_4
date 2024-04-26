@@ -33,6 +33,7 @@ def simular(t_max, delta_t, theta_0, v_0, a_0):
   ax.set(xlabel='time (s)', ylabel='theta', title='Delta t = ' + str(delta_t) + " s")
   ax.grid()
   
+  plt.savefig("test.png")
   plt.show()  
 
 

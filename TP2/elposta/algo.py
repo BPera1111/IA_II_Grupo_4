@@ -1,0 +1,11 @@
+# pert_pos_z = np.interp(pos, dominio_pos, pos_z)
+# pert_pos_np = np.interp(pos, dominio_pos, pos_np)
+# pert_pos_ng = np.interp(pos, dominio_pos, pos_ng)
+# pert_pos_pp = np.interp(pos, dominio_pos, pos_pp)
+# pert_pos_pg = np.interp(pos, dominio_pos, pos_pg)
+
+# pert_vel_z = np.interp(vel, dominio_vel, vel_z)
+# pert_vel_np = np.interp(vel, dominio_vel, vel_np)
+# pert_vel_ng = np.interp(vel, dominio_vel, vel_ng)
+# pert_vel_pp = np.interp(vel, dominio_vel, vel_pp)
+# pert_vel_pg = np.interp(vel, dominio_vel, vel_pg)
