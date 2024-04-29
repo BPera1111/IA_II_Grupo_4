@@ -105,7 +105,6 @@ def mutacion(individuo, probabilidad_mutacion):
                 individuo.matriz[i][j] = mutante
                 individuo.matriz[index_dict[mutante][0][0]][index_dict[mutante][0][1]] = original
     return individuo
-
 # Parámetros del algoritmo genético
 tamano_poblacion = 100
 probabilidad_mutacion = 0.01
@@ -124,16 +123,19 @@ for i in range(tamano_poblacion):
 productos = [[[52], [75], [81], [100], [2]],
              [[52], [3], [4], [5], [6]], 
              [[52], [43], [44], [45], [46]]]
-
+mejor_especimen=[]
 # Evolución
 for _ in range(num_generaciones):
     try:
         # Evaluación de la población
+        #for todos los productos
         fitness=[]
         fitness_suma=np.zeros(len(tableros))
         for j in range(len(productos)):
             fitness=[evaluar_almacen(productos[j],individuo) for individuo in tableros]#+fitness
             fitness_suma=np.array(fitness)+fitness_suma
+            
+        #fitness = [evaluar_almacen(productos,individuo) for individuo in tableros]
         fitness_suma=list(fitness_suma)
         print("Fitness promedio:", np.mean(fitness_suma))
         # Selección
@@ -143,26 +145,22 @@ for _ in range(num_generaciones):
         for i in range(0, len(seleccionados), 2):
             hijo1, hijo2 = cruce(seleccionados[i], seleccionados[i + 1])
             descendientes.extend([hijo1, hijo2])
+
         # Corregir los valores repetidos en los descendientes
         descendientes = [corregir_valores_repetidos(individuo) for individuo in descendientes]
+
         # Mutación
         tableros = [mutacion(individuo, probabilidad_mutacion) for individuo in descendientes]
+
         tableros = [corregir_valores_repetidos(individuo) for individuo in tableros]
+
         print("Generación: ", _+1)
     except Exception as e:
         print("Error en la generación", _, ":", e)
         continue
 # Selección del mejor individuo
-fitness_suma=np.zeros(len(tableros))
 for i in range(len(productos)):
-    fitness=[evaluar_almacen(productos[i],individuo) for individuo in tableros]
-    fitness_suma=np.array(fitness)+fitness_suma   
-print(fitness_suma)
-mejor_individuo = tableros[np.argmin(fitness_suma)]
-for i in range(len(productos)):
-    prueba=evaluar_almacen(productos[i],mejor_individuo)
-    print("Fitness del mejor individuo para el producto",i+1,":",prueba)
-#mejor_individuo = tableros[np.argmax([evaluar_almacen(productos,individuo) for individuo in tableros])]
+    mejor_individuo = tableros[np.argmax([evaluar_almacen(productos[i],individuo) for individuo in tableros])]
 #print mejor individuo con formato
 for i in range(mejor_individuo.filas):
     print(mejor_individuo.matriz[i])    
