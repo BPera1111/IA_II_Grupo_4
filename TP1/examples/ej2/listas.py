@@ -6,10 +6,10 @@ class ListaAbiertos:
         self.nodos.append(nodo)
         self.nodos.sort(key=lambda x: x.f)
 
-    def remover(self, nodo):
+    def remover(self, nodo): #remover el nodo de la lista de abiertos
         self.nodos.remove(nodo)
 
-    def obtener_nodo_mas_cercano(self):
+    def obtener_nodo_mas_cercano(self): #obtener el nodo con menor f
         return self.nodos[0]
     
     def contiene(self, nodo):#verificar si el nodo ya esta en la lista de abiertos
@@ -22,7 +22,7 @@ class ListaCerrados:
     def __init__(self):
         self.nodos = []
 
-    def agregar(self, nodo):
+    def agregar(self, nodo): #agregar el nodo a la lista de cerrados
         self.nodos.append(nodo)
 
     def contiene(self, nodo):#verificar si el nodo ya esta en la lista de cerrados
