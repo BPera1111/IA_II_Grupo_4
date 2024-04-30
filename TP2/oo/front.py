@@ -37,6 +37,11 @@ def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocida
         text = font.render("Velocidad: " + str(velocidad_carro[index]), True, (0, 0, 0))
         screen.blit(text, (carrito_x - 50, 400))
 
+        #dibujar debajo el valor de la posición
+        font = pygame.font.Font(None, 36)
+        text = font.render("Posición: " + str(posiciones_carrito[index]), True, (0, 0, 0))
+        screen.blit(text, (carrito_x - 50, 450))
+
 
         # Dibujar el inicio del péndulo en la posición del carrito y que el extremo del péndulo tenga el ángulo actual respecto de una vertical hacia arriba
         pendulo_x = carrito_x

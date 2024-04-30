@@ -92,7 +92,7 @@ class fuzzy_logic():
                 ["NG","PG","NP","NG","NG"],
                 ["NG","NG","NP","NG","Z" ]
             ]
-        elif self.tipo == 'carro':
+        elif self.tipo == 'carrito':
             rules = [
                 ["PG","PG","PG","PP","Z"],
                 ["PG","PP","PP","Z","NP"],
@@ -124,6 +124,7 @@ class fuzzy_logic():
         fuerza_ng_c = cut(max(NG),self.fuerza_ng)
 
         fuerza=union([fuerza_z_c,fuerza_pp_c,fuerza_pg_c,fuerza_np_c,fuerza_ng_c])
+        
 
         self.fuerza = defuzz(self.dom_f,fuerza, self.defuzzification)
         # print("\n\nFuerza: ",self.fuerza)
@@ -155,14 +156,15 @@ class pendulo():
         denominador = self.longitud_pendulo * (4/3 - (self.masa_pendulo * np.power(np.cos(theta), 2) / (self.masa_carro + self.masa_pendulo)))
         return numerador / denominador
     
-    def simular(self,obj):
+    def simular(self,obj,obj2):
         theta = (self.theta * np.pi) / 180
         v_carro = 0
-        p_carro = 0
+        p_carro = 15
         m_t = self.masa_carro + self.masa_pendulo
 
         for t in self.x:
-            force = obj.fuzzy(theta*180/np.pi, self.vel)
+            #force = obj.fuzzy(theta*180/np.pi, self.vel)
+            force = obj2.fuzzy(p_carro, v_carro)
             a_carro = force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
