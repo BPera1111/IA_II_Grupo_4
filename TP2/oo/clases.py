@@ -4,11 +4,14 @@ from scipy import constants
 import matplotlib.pyplot as plt
 
 class fuzzy_logic():
-    def __init__(self, rF,defuzzification='centroid'):
-        self.rF = rF
-        self.dom_pos = np.linspace(-180, 180, 3600)
-        self.dom_vel = np.linspace(-20,20,400)
-        self.dom_f = np.linspace(-self.rF, self.rF, 400)
+    def __init__(self, fmax,pmax,vmax,tipo,defuzzification='centroid'):
+        self.fmax = fmax
+        self.pmax = pmax
+        self.vmax = vmax
+        self.tipo = tipo
+        self.dom_pos = np.linspace(-self.pmax, self.pmax, self.pmax)
+        self.dom_vel = np.linspace(-self.vmax, self.vmax, self.vmax)
+        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax)
         self.pos_z = None
         self.pos_np = None
         self.pos_ng = None
@@ -25,28 +28,27 @@ class fuzzy_logic():
         self.fuerza_pp = None
         self.fuerza_pg = None
         self.fuerza = None
-        self.defuzzification = defuzzification
-
+        self.defuzzification = defuzzification 
 
     def func_pertenencia(self):
-        self.pos_z = vec_medio(-67.5, 67.5, self.dom_pos)
-        self.pos_np = vec_medio(-135, 0, self.dom_pos)
-        self.pos_ng = vec_extremo(-135, -67.5, self.dom_pos,'izq')
-        self.pos_pp = vec_medio(0, 135, self.dom_pos)
-        self.pos_pg = vec_extremo(67.5, 135, self.dom_pos,'der')
+        self.pos_z = vec_medio(-0.25*self.pmax, 0.25*self.pmax, self.dom_pos)
+        self.pos_np = vec_medio(-0.5*self.pmax, 0, self.dom_pos)
+        self.pos_ng = vec_extremo(-0.5*self.pmax, -0.25*self.pmax, self.dom_pos,'izq')
+        self.pos_pp = vec_medio(0, 0.5*self.pmax, self.dom_pos)
+        self.pos_pg = vec_extremo(0.25*self.pmax, 0.5*self.pmax, self.dom_pos,'der')
     
 
-        self.vel_z = vec_medio(-7.5, 7.5, self.dom_vel)
-        self.vel_np = vec_medio(-15, 0, self.dom_vel)
-        self.vel_ng = vec_extremo(-15, -7.5, self.dom_vel,'izq')
-        self.vel_pp = vec_medio(0, 15, self.dom_vel)
-        self.vel_pg = vec_extremo(7.5, 15, self.dom_vel,'der')
+        self.vel_z = vec_medio(-0.25*self.vmax, 0.25*self.vmax, self.dom_vel)
+        self.vel_np = vec_medio(-0.5*self.vmax, 0, self.dom_vel)
+        self.vel_ng = vec_extremo(-0.5*self.vmax, -0.25*self.vmax, self.dom_vel,'izq')
+        self.vel_pp = vec_medio(0, 0.5*self.vmax, self.dom_vel)
+        self.vel_pg = vec_extremo(0.25*self.vmax, 0.5*self.vmax, self.dom_vel,'der')
 
-        self.fuerza_z = vec_medio(-0.375*self.rF, 0.375*self.rF, self.dom_f)
-        self.fuerza_np = vec_medio(-0.75*self.rF, 0, self.dom_f)
-        self.fuerza_ng = vec_extremo(-0.75*self.rF, -0.375*self.rF, self.dom_f,'izq')
-        self.fuerza_pp = vec_medio(0, 0.75*self.rF, self.dom_f)
-        self.fuerza_pg = vec_extremo(0.375*self.rF, 0.75*self.rF, self.dom_f,'der')
+        self.fuerza_z = vec_medio(-0.25*self.fmax, 0.25*self.fmax, self.dom_f)
+        self.fuerza_np = vec_medio(-0.5*self.fmax, 0, self.dom_f)
+        self.fuerza_ng = vec_extremo(-0.5*self.fmax, -0.25*self.fmax, self.dom_f,'izq')
+        self.fuerza_pp = vec_medio(0, 0.5*self.fmax, self.dom_f)
+        self.fuerza_pg = vec_extremo(0.25*self.fmax, 0.5*self.fmax, self.dom_f,'der')
 
 
     def fuzzy(self, pos, vel):
@@ -81,14 +83,23 @@ class fuzzy_logic():
             [min(png,vpg),min(pnp,vpg),min(pz,vpg),min(ppp,vpg),min(ppg,vpg)]
         ]
 
-        rules = [
-            ["Z", "PG","PG","PG","PG"],
-            ["PG","PG","PP","NG","PG"],
-            ["NG","PG","Z" ,"NG","PG"],
-            ["NG","PG","NP","NG","NG"],
-            ["NG","NG","NP","NG","Z" ]
-        ]
 
+        if self.tipo == 'pendulo':
+            rules = [
+                ["Z", "PG","PG","PG","PG"],
+                ["PG","PG","PP","NG","PG"],
+                ["NG","PG","Z" ,"NG","PG"],
+                ["NG","PG","NP","NG","NG"],
+                ["NG","NG","NP","NG","Z" ]
+            ]
+        elif self.tipo == 'carro':
+            rules = [
+                ["PG","PG","PG","PP","Z"],
+                ["PG","PP","PP","Z","NP"],
+                ["PG","PP","Z" ,"NP","NG"],
+                ["PP","Z","NP","NP","NG"],
+                ["Z","NP","NG","NG","NG"]
+            ]
         PP=[];PG=[];Z=[];NP=[];NG=[]
 
         for i in range(5):
