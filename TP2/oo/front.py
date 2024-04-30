@@ -3,7 +3,7 @@ from pygame.locals import *
 import numpy as np
 
 # Definir las dimensiones de la pantalla
-w = 1500
+w = 1000
 h = 600
 
 def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocidad_carro):
@@ -24,7 +24,7 @@ def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocida
         screen.fill((255, 255, 255))  # Limpia la pantalla con blanco
 
         # Dibujar el carrito en el centro de la pantalla
-        carrito_x = w/4 + posiciones_carrito[index] * 10  # Multiplica por 10 para que se vea mejor
+        carrito_x = w/4 + posiciones_carrito[index]   # Multiplica por 10 para que se vea mejor
         pygame.draw.rect(screen, (255, 0, 0), (carrito_x - 50, 300, 100, 50)) # pygame.draw.rect(screen, color, rect (x,y,width,height)
 
         #dibujar debajo del carrito el valor de la fuerza

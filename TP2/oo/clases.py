@@ -51,34 +51,66 @@ class fuzzy_logic():
 
     def fuzzy(self, pos, vel):
         #fuzzificacion de las variables de entrada
-        pert_pos_z = np.interp(pos, self.dom_pos, self.pos_z)
-        pert_pos_np = np.interp(pos, self.dom_pos, self.pos_np)
-        pert_pos_ng = np.interp(pos, self.dom_pos, self.pos_ng)
-        pert_pos_pp = np.interp(pos, self.dom_pos, self.pos_pp)
-        pert_pos_pg = np.interp(pos, self.dom_pos, self.pos_pg)
+        pz = np.interp(pos, self.dom_pos, self.pos_z)
+        pnp = np.interp(pos, self.dom_pos, self.pos_np)
+        png = np.interp(pos, self.dom_pos, self.pos_ng)
+        ppp = np.interp(pos, self.dom_pos, self.pos_pp)
+        ppg = np.interp(pos, self.dom_pos, self.pos_pg)
 
-        pert_vel_z = np.interp(vel, self.dom_vel, self.vel_z)
-        pert_vel_np = np.interp(vel, self.dom_vel, self.vel_np)
-        pert_vel_ng = np.interp(vel, self.dom_vel, self.vel_ng)
-        pert_vel_pp = np.interp(vel, self.dom_vel, self.vel_pp)
-        pert_vel_pg = np.interp(vel, self.dom_vel, self.vel_pg)
+        vz = np.interp(vel, self.dom_vel, self.vel_z)
+        vnp = np.interp(vel, self.dom_vel, self.vel_np)
+        vng = np.interp(vel, self.dom_vel, self.vel_ng)
+        vpp = np.interp(vel, self.dom_vel, self.vel_pp)
+        vpg = np.interp(vel, self.dom_vel, self.vel_pg)
 
-        #reglas de inferencia + conjuntos difusos de salida
-        FZ=[min(pert_pos_z, pert_vel_z),min(pert_pos_ng, pert_vel_ng),min(pert_pos_pg,pert_vel_pg)]
-        #FPP=[min(pert_pos_z, pert_pos_np), min(pert_pos_np, pert_vel_pg)]
-        FPP=[min(pert_pos_z, pert_pos_np)]
+        # #reglas de inferencia + conjuntos difusos de salida
+        # FZ=[min(pert_pos_z, pert_vel_z),min(pert_pos_ng, pert_vel_ng),min(pert_pos_pg,pert_vel_pg)]
+        # #FPP=[min(pert_pos_z, pert_pos_np), min(pert_pos_np, pert_vel_pg)]
+        # FPP=[min(pert_pos_z, pert_pos_np)]
 
-        FPG=[min(pert_pos_ng, pert_vel_np),min(pert_pos_ng, pert_vel_z),min(pert_pos_np, pert_vel_ng),min(pert_pos_np,pert_vel_np),min(pert_pos_np, pert_vel_z),min(pert_pos_np, pert_vel_pp),min(pert_pos_z,pert_vel_ng),min(pert_pos_pg, pert_vel_ng),min(pert_pos_pg,pert_vel_np), min(pert_pos_pp, pert_vel_ng)]
-        #FNP=[min(pert_pos_pp, pert_vel_ng),min(pert_pos_z, pert_vel_pp)]
-        FNP=[min(pert_pos_z, pert_vel_pp)]
-        FNG=[min(pert_pos_ng, pert_vel_pp),min(pert_pos_ng, pert_vel_pg),min(pert_pos_z, pert_vel_pg),min(pert_pos_pp, pert_vel_np),min(pert_pos_pp,pert_vel_z),min(pert_pos_pp, pert_vel_pp),min(pert_pos_pp, pert_vel_pg),min(pert_pos_pg,pert_vel_z),min(pert_pos_pg, pert_vel_pp),min(pert_pos_np, pert_vel_pg)]
+        # FPG=[min(pert_pos_ng, pert_vel_np),min(pert_pos_ng, pert_vel_z),min(pert_pos_np, pert_vel_ng),min(pert_pos_np,pert_vel_np),min(pert_pos_np, pert_vel_z),min(pert_pos_np, pert_vel_pp),min(pert_pos_z,pert_vel_ng),min(pert_pos_pg, pert_vel_ng),min(pert_pos_pg,pert_vel_np), min(pert_pos_pp, pert_vel_ng)]
+        # #FNP=[min(pert_pos_pp, pert_vel_ng),min(pert_pos_z, pert_vel_pp)]
+        # FNP=[min(pert_pos_z, pert_vel_pp)]
+        # FNG=[min(pert_pos_ng, pert_vel_pp),min(pert_pos_ng, pert_vel_pg),min(pert_pos_z, pert_vel_pg),min(pert_pos_pp, pert_vel_np),min(pert_pos_pp,pert_vel_z),min(pert_pos_pp, pert_vel_pp),min(pert_pos_pp, pert_vel_pg),min(pert_pos_pg,pert_vel_z),min(pert_pos_pg, pert_vel_pp),min(pert_pos_np, pert_vel_pg)]
+
+        cuadro = [
+            [min(png,vng),min(pnp,vng),min(pz,vng),min(ppp,vng),min(ppg,vng)],
+            [min(png,vnp),min(pnp,vnp),min(pz,vnp),min(ppp,vnp),min(ppg,vnp)],
+            [min(png,vz) ,min(pnp,vz) ,min(pz,vz) ,min(ppp,vz) ,min(ppg,vz) ],
+            [min(png,vpp),min(pnp,vpp),min(pz,vpp),min(ppp,vpp),min(ppg,vpp)],
+            [min(png,vpg),min(pnp,vpg),min(pz,vpg),min(ppp,vpg),min(ppg,vpg)]
+        ]
+
+        rules = [
+            ["Z", "PG","PG","PG","PG"],
+            ["PG","PG","PP","NG","PG"],
+            ["NG","PG","Z" ,"NG","PG"],
+            ["NG","PG","NP","NG","NG"],
+            ["NG","NG","NP","NG","Z" ]
+        ]
+
+        PP=[];PG=[];Z=[];NP=[];NG=[]
+
+        for i in range(5):
+            for j in range(5):
+                if rules[i][j] == "Z":
+                    Z.append(cuadro[i][j])
+                elif rules[i][j] == "PP":
+                    PP.append(cuadro[i][j])
+                elif rules[i][j] == "PG":
+                    PG.append(cuadro[i][j])
+                elif rules[i][j] == "NP":
+                    NP.append(cuadro[i][j])
+                elif rules[i][j] == "NG":
+                    NG.append(cuadro[i][j])
+                    
 
         #defuzzificacion
-        fuerza_z_c = cut(FZ[0],self.fuerza_z)
-        fuerza_pp_c = cut(max(FPP),self.fuerza_pp)
-        fuerza_pg_c = cut(max(FPG),self.fuerza_pg)
-        fuerza_np_c = cut(max(FNP),self.fuerza_np)
-        fuerza_ng_c = cut(max(FNG),self.fuerza_ng)
+        fuerza_z_c = cut(max(Z),self.fuerza_z)
+        fuerza_pp_c = cut(PP[0],self.fuerza_pp)
+        fuerza_pg_c = cut(max(PG),self.fuerza_pg)
+        fuerza_np_c = cut(NP[0],self.fuerza_np)
+        fuerza_ng_c = cut(max(NG),self.fuerza_ng)
 
         fuerza=union([fuerza_z_c,fuerza_pp_c,fuerza_pg_c,fuerza_np_c,fuerza_ng_c])
 
@@ -116,11 +148,11 @@ class pendulo():
         theta = (self.theta * np.pi) / 180
         v_carro = 0
         p_carro = 0
-        m_carro = self.masa_carro
+        m_t = self.masa_carro + self.masa_pendulo
 
         for t in self.x:
             force = obj.fuzzy(theta*180/np.pi, self.vel)
-            a_carro = force / m_carro
+            a_carro = force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
             self.velocidad_carro.append(v_carro)
