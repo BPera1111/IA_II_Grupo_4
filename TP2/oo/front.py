@@ -3,7 +3,7 @@ from pygame.locals import *
 import numpy as np
 
 # Definir las dimensiones de la pantalla
-w = 1920
+w = 1500
 h = 600
 
 def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocidad_carro):

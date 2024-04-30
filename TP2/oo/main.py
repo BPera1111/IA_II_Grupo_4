@@ -11,7 +11,7 @@ def main():
 
     test.graficar()
 
-    front.graficar_pendulo(test.y, test.posicion_carro,test.x,test.f,test.velocidad_carro)
+    #front.graficar_pendulo(test.y, test.posicion_carro,test.x,test.f,test.velocidad_carro)
 
     
 

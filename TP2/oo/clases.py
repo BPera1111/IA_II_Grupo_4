@@ -29,24 +29,24 @@ class fuzzy_logic():
 
 
     def func_pertenencia(self):
-        self.pos_z = vec_medio(-45, 45, self.dom_pos)
-        self.pos_np = vec_medio(-90, 0, self.dom_pos)
-        self.pos_ng = vec_extremo(-90, -45, self.dom_pos,'izq')
-        self.pos_pp = vec_medio(0, 90, self.dom_pos)
-        self.pos_pg = vec_extremo(45, 90, self.dom_pos,'der')
+        self.pos_z = vec_medio(-67.5, 67.5, self.dom_pos)
+        self.pos_np = vec_medio(-135, 0, self.dom_pos)
+        self.pos_ng = vec_extremo(-135, -67.5, self.dom_pos,'izq')
+        self.pos_pp = vec_medio(0, 135, self.dom_pos)
+        self.pos_pg = vec_extremo(67.5, 135, self.dom_pos,'der')
     
 
-        self.vel_z = vec_medio(-5, 5, self.dom_vel)
-        self.vel_np = vec_medio(-10, 0, self.dom_vel)
-        self.vel_ng = vec_extremo(-10, -5, self.dom_vel,'izq')
-        self.vel_pp = vec_medio(0, 10, self.dom_vel)
-        self.vel_pg = vec_extremo(5, 10, self.dom_vel,'der')
+        self.vel_z = vec_medio(-7.5, 7.5, self.dom_vel)
+        self.vel_np = vec_medio(-15, 0, self.dom_vel)
+        self.vel_ng = vec_extremo(-15, -7.5, self.dom_vel,'izq')
+        self.vel_pp = vec_medio(0, 15, self.dom_vel)
+        self.vel_pg = vec_extremo(7.5, 15, self.dom_vel,'der')
 
-        self.fuerza_z = vec_medio(-0.25*self.rF, 0.25*self.rF, self.dom_f)
-        self.fuerza_np = vec_medio(-0.50*self.rF, 0, self.dom_f)
-        self.fuerza_ng = vec_extremo(-0.50*self.rF, -0.25*self.rF, self.dom_f,'izq')
-        self.fuerza_pp = vec_medio(0, 0.50*self.rF, self.dom_f)
-        self.fuerza_pg = vec_extremo(0.25*self.rF, 0.50*self.rF, self.dom_f,'der')
+        self.fuerza_z = vec_medio(-0.375*self.rF, 0.375*self.rF, self.dom_f)
+        self.fuerza_np = vec_medio(-0.75*self.rF, 0, self.dom_f)
+        self.fuerza_ng = vec_extremo(-0.75*self.rF, -0.375*self.rF, self.dom_f,'izq')
+        self.fuerza_pp = vec_medio(0, 0.75*self.rF, self.dom_f)
+        self.fuerza_pg = vec_extremo(0.375*self.rF, 0.75*self.rF, self.dom_f,'der')
 
 
     def fuzzy(self, pos, vel):

@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 def vec_medio(inicio, fin, dominio):    
     #armar vector que abarque todo el dominio y sea triangular desde inicio hasta fin
     medio = np.zeros(len(dominio))
