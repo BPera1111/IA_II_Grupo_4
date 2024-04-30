@@ -64,11 +64,14 @@ class fuzzy_logic():
         pert_vel_pg = np.interp(vel, self.dom_vel, self.vel_pg)
 
         #reglas de inferencia + conjuntos difusos de salida
-        FZ=[min(pert_pos_z, pert_vel_z)]
-        FPP=[min(pert_pos_z, pert_pos_np), min(pert_pos_np, pert_vel_pg)]
-        FPG=[min(pert_pos_ng, pert_vel_ng),min(pert_pos_ng, pert_vel_np),min(pert_pos_ng, pert_vel_z),min(pert_pos_np, pert_vel_ng),min(pert_pos_np,pert_vel_np),min(pert_pos_np, pert_vel_z),min(pert_pos_np, pert_vel_pp),min(pert_pos_z,pert_vel_ng),min(pert_pos_pg, pert_vel_ng),min(pert_pos_pg,pert_vel_np)]
-        FNP=[min(pert_pos_pp, pert_vel_ng),min(pert_pos_z, pert_vel_pp)]
-        FNG=[min(pert_pos_ng, pert_vel_pp),min(pert_pos_ng, pert_vel_pg),min(pert_pos_z, pert_vel_pg),min(pert_pos_pp, pert_vel_np),min(pert_pos_pp,pert_vel_z),min(pert_pos_pp, pert_vel_pp),min(pert_pos_pp, pert_vel_pg),min(pert_pos_pg,pert_vel_z),min(pert_pos_pg, pert_vel_pp),min(pert_pos_pg,pert_vel_pg)]
+        FZ=[min(pert_pos_z, pert_vel_z),min(pert_pos_ng, pert_vel_ng),min(pert_pos_pg,pert_vel_pg)]
+        #FPP=[min(pert_pos_z, pert_pos_np), min(pert_pos_np, pert_vel_pg)]
+        FPP=[min(pert_pos_z, pert_pos_np)]
+
+        FPG=[min(pert_pos_ng, pert_vel_np),min(pert_pos_ng, pert_vel_z),min(pert_pos_np, pert_vel_ng),min(pert_pos_np,pert_vel_np),min(pert_pos_np, pert_vel_z),min(pert_pos_np, pert_vel_pp),min(pert_pos_z,pert_vel_ng),min(pert_pos_pg, pert_vel_ng),min(pert_pos_pg,pert_vel_np), min(pert_pos_pp, pert_vel_ng)]
+        #FNP=[min(pert_pos_pp, pert_vel_ng),min(pert_pos_z, pert_vel_pp)]
+        FNP=[min(pert_pos_z, pert_vel_pp)]
+        FNG=[min(pert_pos_ng, pert_vel_pp),min(pert_pos_ng, pert_vel_pg),min(pert_pos_z, pert_vel_pg),min(pert_pos_pp, pert_vel_np),min(pert_pos_pp,pert_vel_z),min(pert_pos_pp, pert_vel_pp),min(pert_pos_pp, pert_vel_pg),min(pert_pos_pg,pert_vel_z),min(pert_pos_pg, pert_vel_pp),min(pert_pos_np, pert_vel_pg)]
 
         #defuzzificacion
         fuerza_z_c = cut(FZ[0],self.fuerza_z)
@@ -98,6 +101,8 @@ class pendulo():
         self.masa_carro = masa_carro
         self.masa_pendulo = masa_pendulo
         self.longitud_pendulo = longitud_pendulo
+        self.posicion_carro = []
+        self.velocidad_carro = []
 
 
     def calcula_aceleracion(self,theta, v,f): 
@@ -109,17 +114,32 @@ class pendulo():
     
     def simular(self,obj):
         theta = (self.theta * np.pi) / 180
+        v_carro = 0
+        p_carro = 0
+        m_carro = self.masa_carro
 
         for t in self.x:
             force = obj.fuzzy(theta*180/np.pi, self.vel)
+            a_carro = force / m_carro
+            v_carro = v_carro + a_carro * self.delta_t
+            p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
+            self.velocidad_carro.append(v_carro)
+            self.posicion_carro.append(p_carro)
             self.f.append(force)
             self.acel = self.calcula_aceleracion(theta, self.vel,force)
             # print("Tiempo: ",t)
-            # print("angulo: ",theta*180/np.pi)
-            # print("velocidad: ",self.vel)
+            #print("angulo: ",theta*180/np.pi)
+            #print("velocidad: ",self.vel)
+            if abs(self.vel)>20:
+                print("engine caput")
+                pass
             # time.sleep(0.1)
             self.vel = self.vel + self.acel * self.delta_t
             theta = theta + self.vel * self.delta_t + self.acel * np.power(self.delta_t, 2) / 2
+            if theta > np.pi:
+                theta = theta - 2 * np.pi
+            elif theta < -np.pi:
+                theta = theta + 2 * np.pi
             self.y.append(theta*180/np.pi)
 
     def graficar(self):

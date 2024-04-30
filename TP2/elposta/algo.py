@@ -57,7 +57,7 @@ def calcula_aceleracion(theta, v):
 
 #x2,y2 = simular(50, 0.01, 45, 0, 0)
 
-x3,y3 = simular(50, 0.001, 45, 0, 0)
+x3,y3 = simular(50, 0.001, -150, 0, 0)
 
 #x4,y4 = simular(50, 0.0001, 45, 0, 0)
 

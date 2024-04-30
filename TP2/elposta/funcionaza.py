@@ -110,7 +110,7 @@ def anashe(pos,vel):
     # Define tus conjuntos difusos aquí
     dominio_pos = np.linspace(-180, 180, 3600)
     dominio_vel = np.linspace(-20,20,400)
-    rango_fuerza=100
+    rango_fuerza=10
     dominio_fuerza = np.linspace(-rango_fuerza,rango_fuerza,400)
 
     pos_z = vec_medio(-45, 45, dominio_pos)
