@@ -84,7 +84,7 @@ class fuzzy_logic():
         rules = [
             ["Z", "PG","PG","PG","PG"],
             ["PG","PG","PP","NG","PG"],
-            ["PG","PG","Z" ,"NG","NG"],
+            ["NG","PG","Z" ,"NG","PG"],
             ["NG","PG","NP","NG","NG"],
             ["NG","NG","NP","NG","Z" ]
         ]
@@ -148,11 +148,11 @@ class pendulo():
         theta = (self.theta * np.pi) / 180
         v_carro = 0
         p_carro = 0
-        m_carro = self.masa_carro
+        m_t = self.masa_carro + self.masa_pendulo
 
         for t in self.x:
             force = obj.fuzzy(theta*180/np.pi, self.vel)
-            a_carro = force / m_carro
+            a_carro = force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
             self.velocidad_carro.append(v_carro)
