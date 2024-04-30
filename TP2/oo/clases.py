@@ -9,9 +9,9 @@ class fuzzy_logic():
         self.pmax = pmax
         self.vmax = vmax
         self.tipo = tipo
-        self.dom_pos = np.linspace(-self.pmax, self.pmax, self.pmax)
-        self.dom_vel = np.linspace(-self.vmax, self.vmax, self.vmax)
-        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax)
+        self.dom_pos = np.linspace(-self.pmax, self.pmax, self.pmax*20)
+        self.dom_vel = np.linspace(-self.vmax, self.vmax, self.vmax*20)
+        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax*2)
         self.pos_z = None
         self.pos_np = None
         self.pos_ng = None
@@ -163,8 +163,8 @@ class pendulo():
         m_t = self.masa_carro + self.masa_pendulo
 
         for t in self.x:
-            #force = obj.fuzzy(theta*180/np.pi, self.vel)
-            force = obj2.fuzzy(p_carro, v_carro)
+            force = obj.fuzzy(theta*180/np.pi, self.vel)
+            #force = obj2.fuzzy(p_carro, v_carro)
             a_carro = force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
