@@ -3,10 +3,10 @@ import front
 
 def main():
      # default option centroid, bisector, MOM, SOM, LOM
-    algo = clases.fuzzy_logic(100)
+    algo = clases.fuzzy_logic(600)
     algo.func_pertenencia()
 
-    test = clases.pendulo(10, 0.001, -150, 0, 0,2,1,1)
+    test = clases.pendulo(10, 0.001, -85, 0, 0,2,1,1)
     test.simular(algo)
 
     test.graficar()
