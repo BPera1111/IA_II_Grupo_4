@@ -6,7 +6,7 @@ def main():
     pendulo.func_pertenencia()
 
 
-    carrito = clases.fuzzy_logic(1000,100,50,'carrito')
+    carrito = clases.fuzzy_logic(300,20,50,'carrito')
     carrito.func_pertenencia()
 
 

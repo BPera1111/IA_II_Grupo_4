@@ -12,7 +12,7 @@ class fuzzy_logic():
         self.tipo = tipo
         self.dom_pos = np.linspace(-self.pmax, self.pmax, self.pmax*20)
         self.dom_vel = np.linspace(-self.vmax, self.vmax, self.vmax*20)
-        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax)
+        self.dom_f = np.linspace(-self.fmax, self.fmax, 500)
         self.pos_z = None
         self.pos_np = None
         self.pos_ng = None
@@ -112,11 +112,11 @@ class fuzzy_logic():
             ]
         elif self.tipo == 'carrito':
             rules = [
-                ["PG","PG","PG","PP","Z"],
+                ["PG","PP","PP","PP","Z"],
                 ["PG","PP","PP","Z","NP"],
                 ["PG","PP","Z" ,"NP","NG"],
                 ["PP","Z","NP","NP","NG"],
-                ["Z","NP","NG","NG","NG"]
+                ["Z","NP","NP","NP","NG"]
             ]
         PP=[];PG=[];Z=[];NP=[];NG=[]
 
@@ -192,7 +192,7 @@ class pendulo():
             # plt.show()
             force=defuzz(obj.dom_f,force3,'centroid')
             #force = (force1 + force2) / 2
-            a_carro = force / m_t
+            a_carro = -force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
             self.velocidad_carro.append(v_carro)
@@ -217,12 +217,16 @@ class pendulo():
                 theta = theta + 2 * np.pi
             self.y.append(theta*180/np.pi)
 
-    def graficar(self):
-        fig, ax = plt.subplots()
-        ax.plot(self.x, self.y)
 
-        ax.set(xlabel='time (s)', ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
-        ax.grid()
-        
+
+    def graficar(self):
+        fig, ax = plt.subplots(2, 1, sharex=True)
+        ax[0].plot(self.x, self.y)
+        ax[0].set(ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
+        ax[0].grid()
+
+        ax[1].plot(self.x, self.posicion_carro)
+        ax[1].set(xlabel='time (s)', ylabel='posicion carro')
+        ax[1].grid()
+
         plt.show()
-        
