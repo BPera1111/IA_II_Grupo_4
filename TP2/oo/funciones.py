@@ -39,7 +39,7 @@ def vec_extremo(inicio, fin, dominio,lado):
                 extremo[i] = (dominio[i] - inicio)/(fin - inicio)
         return extremo
 
-def cut(value, mf):
+def corte(value, mf):
     value = float(value)
     aux = np.zeros(mf.size)
     if (type(value) is int) or (type(value) is float):
@@ -98,5 +98,3 @@ def defuzz(y, mf, option):
             if (mf[y.size - i -1] == mf_max):
                 return y[y.size - i -1]
             
-    else:
-        return -1

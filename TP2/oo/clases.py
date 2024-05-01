@@ -12,7 +12,7 @@ class fuzzy_logic():
         self.tipo = tipo
         self.dom_pos = np.linspace(-self.pmax, self.pmax, self.pmax*20)
         self.dom_vel = np.linspace(-self.vmax, self.vmax, self.vmax*20)
-        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax)
+        self.dom_f = np.linspace(-self.fmax, self.fmax, 500)
         self.pos_z = None
         self.pos_np = None
         self.pos_ng = None
@@ -111,12 +111,19 @@ class fuzzy_logic():
                 ["NG","NG","NG","NG","Z" ]
             ]
         elif self.tipo == 'carrito':
+            # rules = [
+            #     ["PG","PG","PP","PP","Z"],
+            #     ["PG","PP","PP","Z","NP"],
+            #     ["PG","PP","Z" ,"NP","NG"],
+            #     ["PP","Z","NP","NP","NG"],
+            #     ["Z","NP","NP","NG","NG"]
+            # ]
             rules = [
-                ["PG","PG","PG","PP","Z"],
+                ["PG","PP","PP","PP","Z"],
                 ["PG","PP","PP","Z","NP"],
                 ["PG","PP","Z" ,"NP","NG"],
                 ["PP","Z","NP","NP","NG"],
-                ["Z","NP","NG","NG","NG"]
+                ["Z","NP","NP","NP","NG"]
             ]
         PP=[];PG=[];Z=[];NP=[];NG=[]
 
@@ -135,16 +142,16 @@ class fuzzy_logic():
                     
 
         #defuzzificacion
-        fuerza_z_c = cut(max(Z),self.fuerza_z)
-        fuerza_pp_c = cut(max(PP),self.fuerza_pp)
-        fuerza_pg_c = cut(max(PG),self.fuerza_pg)
-        fuerza_np_c = cut(max(NP),self.fuerza_np)
-        fuerza_ng_c = cut(max(NG),self.fuerza_ng)
+        fuerza_z_c = corte(max(Z),self.fuerza_z)
+        fuerza_pp_c = corte(max(PP),self.fuerza_pp)
+        fuerza_pg_c = corte(max(PG),self.fuerza_pg)
+        fuerza_np_c = corte(max(NP),self.fuerza_np)
+        fuerza_ng_c = corte(max(NG),self.fuerza_ng)
 
-        fuerza=union([fuerza_z_c,fuerza_pp_c,fuerza_pg_c,fuerza_np_c,fuerza_ng_c])
+        fuerza=[fuerza_z_c,fuerza_pp_c,fuerza_pg_c,fuerza_np_c,fuerza_ng_c]
         
 
-        self.fuerza = defuzz(self.dom_f,fuerza, self.defuzzification)
+        #self.fuerza = defuzz(self.dom_f,fuerza, self.defuzzification)
         # print("\n\nFuerza: ",self.fuerza)
 
         return fuerza
@@ -182,17 +189,23 @@ class pendulo():
 
         for t in self.x:
             force1 = obj.fuzzy(theta*180/np.pi, self.vel)
-            # plt.plot(obj.dom_f,force1)
-            # plt.show()
-            force2 = obj2.fuzzy(p_carro, v_carro)
-            # plt.plot(obj2.dom_f,force2)
-            # plt.show()
-            force3=union([force1,force2])
-            # plt.plot(obj.dom_f,force)
-            # plt.show()
-            force=defuzz(obj.dom_f,force3,'centroid')
+            force1_u=union(force1)
+            # if abs(max(force1[0]))>0.8:
+            if theta*180/np.pi<1 or theta*180/np.pi>-1:
+                # plt.plot(obj.dom_f,force1)
+                # plt.show()
+                force2 = obj2.fuzzy(p_carro, v_carro)
+                force2_u=union(force2)
+                # plt.plot(obj2.dom_f,force2)
+                # plt.show()
+                force3=union([force1_u,force2_u])
+                # plt.plot(obj.dom_f,force)
+                # plt.show()
+                force=defuzz(obj.dom_f,force3,'centroid')
+            else:  
+                force=defuzz(obj.dom_f,force1_u,'centroid')
             #force = (force1 + force2) / 2
-            a_carro = force / m_t
+            a_carro = -force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
             self.velocidad_carro.append(v_carro)
@@ -205,9 +218,9 @@ class pendulo():
             # print("Velocidad carro: ",v_carro)
             #print("angulo: ",theta*180/np.pi)
             #print("velocidad: ",self.vel)
-            if abs(self.vel)>20:
-                print("engine caput")
-                pass
+            # if abs(self.vel)>20:
+            #     print("engine caput")
+            #     pass
             # time.sleep(0.1)
             self.vel = self.vel + self.acel * self.delta_t
             theta = theta + self.vel * self.delta_t + self.acel * np.power(self.delta_t, 2) / 2
@@ -218,11 +231,21 @@ class pendulo():
             self.y.append(theta*180/np.pi)
 
     def graficar(self):
-        fig, ax = plt.subplots()
-        ax.plot(self.x, self.y)
+        fig, ax = plt.subplots(2, 1, sharex=True)
+        ax[0].plot(self.x, self.y)
+        ax[0].set(ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
+        ax[0].grid()
 
-        ax.set(xlabel='time (s)', ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
-        ax.grid()
-        
+        ax[1].plot(self.x, self.posicion_carro)
+        ax[1].set(xlabel='time (s)', ylabel='posicion carro')
+        ax[1].grid()
+
         plt.show()
+        # fig, ax = plt.subplots()
+        # ax.plot(self.x, self.y)
+
+        # ax.set(xlabel='time (s)', ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
+        # ax.grid()
+        
+        # plt.show()
         

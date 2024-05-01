@@ -6,11 +6,11 @@ def main():
     pendulo.func_pertenencia()
 
 
-    carrito = clases.fuzzy_logic(1000,100,50,'carrito')
+    carrito = clases.fuzzy_logic(10,20,50,'carrito')
     carrito.func_pertenencia()
 
 
-    test = clases.pendulo(10, 0.001, 45, 0, 0,2,1,1)
+    test = clases.pendulo(20, 0.001, 85, 0, 0,2,1,1)
     #t_max, dt, angulo_inicial, velocidad_inicial, posicion_carro, fuerza, masa_carro, masa_pendulo
     test.simular(pendulo,carrito)
     test.graficar()
