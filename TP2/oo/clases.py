@@ -3,6 +3,7 @@ import numpy as np
 from scipy import constants
 import matplotlib.pyplot as plt
 
+
 class fuzzy_logic():
     def __init__(self, fmax,pmax,vmax,tipo,defuzzification='centroid'):
         self.fmax = fmax
@@ -11,7 +12,7 @@ class fuzzy_logic():
         self.tipo = tipo
         self.dom_pos = np.linspace(-self.pmax, self.pmax, self.pmax*20)
         self.dom_vel = np.linspace(-self.vmax, self.vmax, self.vmax*20)
-        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax*2)
+        self.dom_f = np.linspace(-self.fmax, self.fmax, self.fmax)
         self.pos_z = None
         self.pos_np = None
         self.pos_ng = None
@@ -53,17 +54,35 @@ class fuzzy_logic():
 
     def fuzzy(self, pos, vel):
         #fuzzificacion de las variables de entrada
+
         pz = np.interp(pos, self.dom_pos, self.pos_z)
         pnp = np.interp(pos, self.dom_pos, self.pos_np)
         png = np.interp(pos, self.dom_pos, self.pos_ng)
         ppp = np.interp(pos, self.dom_pos, self.pos_pp)
         ppg = np.interp(pos, self.dom_pos, self.pos_pg)
+        # plt.plot(self.dom_pos,self.pos_z)
+        # plt.plot(self.dom_pos,self.pos_np)
+        # plt.plot(self.dom_pos,self.pos_ng)
+        # plt.plot(self.dom_pos,self.pos_pp)
+        # plt.plot(self.dom_pos,self.pos_pg)
+        # plt.plot(pz,0,'ro')
+        # plt.plot(pnp,0,'ro')
+        # plt.plot(png,0,'ro')
+        # plt.plot(ppp,0,'ro')
+        # plt.plot(ppg,0,'ro')
+        # plt.show()
+
+
+
 
         vz = np.interp(vel, self.dom_vel, self.vel_z)
         vnp = np.interp(vel, self.dom_vel, self.vel_np)
         vng = np.interp(vel, self.dom_vel, self.vel_ng)
         vpp = np.interp(vel, self.dom_vel, self.vel_pp)
         vpg = np.interp(vel, self.dom_vel, self.vel_pg)
+
+
+
 
         # #reglas de inferencia + conjuntos difusos de salida
         # FZ=[min(pert_pos_z, pert_vel_z),min(pert_pos_ng, pert_vel_ng),min(pert_pos_pg,pert_vel_pg)]
@@ -83,14 +102,13 @@ class fuzzy_logic():
             [min(png,vpg),min(pnp,vpg),min(pz,vpg),min(ppp,vpg),min(ppg,vpg)]
         ]
 
-
         if self.tipo == 'pendulo':
             rules = [
                 ["Z", "PG","PG","PG","PG"],
                 ["PG","PG","PP","NG","PG"],
                 ["NG","PG","Z" ,"NG","PG"],
                 ["NG","PG","NP","NG","NG"],
-                ["NG","NG","NP","NG","Z" ]
+                ["NG","NG","NG","NG","Z" ]
             ]
         elif self.tipo == 'carrito':
             rules = [
@@ -118,9 +136,9 @@ class fuzzy_logic():
 
         #defuzzificacion
         fuerza_z_c = cut(max(Z),self.fuerza_z)
-        fuerza_pp_c = cut(PP[0],self.fuerza_pp)
+        fuerza_pp_c = cut(max(PP),self.fuerza_pp)
         fuerza_pg_c = cut(max(PG),self.fuerza_pg)
-        fuerza_np_c = cut(NP[0],self.fuerza_np)
+        fuerza_np_c = cut(max(NP),self.fuerza_np)
         fuerza_ng_c = cut(max(NG),self.fuerza_ng)
 
         fuerza=union([fuerza_z_c,fuerza_pp_c,fuerza_pg_c,fuerza_np_c,fuerza_ng_c])
@@ -129,7 +147,7 @@ class fuzzy_logic():
         self.fuerza = defuzz(self.dom_f,fuerza, self.defuzzification)
         # print("\n\nFuerza: ",self.fuerza)
 
-        return self.fuerza
+        return fuerza
 
 
 class pendulo():
@@ -159,12 +177,21 @@ class pendulo():
     def simular(self,obj,obj2):
         theta = (self.theta * np.pi) / 180
         v_carro = 0
-        p_carro = 15
+        p_carro = 0
         m_t = self.masa_carro + self.masa_pendulo
 
         for t in self.x:
-            force = obj.fuzzy(theta*180/np.pi, self.vel)
-            #force = obj2.fuzzy(p_carro, v_carro)
+            force1 = obj.fuzzy(theta*180/np.pi, self.vel)
+            # plt.plot(obj.dom_f,force1)
+            # plt.show()
+            force2 = obj2.fuzzy(p_carro, v_carro)
+            # plt.plot(obj2.dom_f,force2)
+            # plt.show()
+            force3=union([force1,force2])
+            # plt.plot(obj.dom_f,force)
+            # plt.show()
+            force=defuzz(obj.dom_f,force3,'centroid')
+            #force = (force1 + force2) / 2
             a_carro = force / m_t
             v_carro = v_carro + a_carro * self.delta_t
             p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
@@ -173,6 +200,9 @@ class pendulo():
             self.f.append(force)
             self.acel = self.calcula_aceleracion(theta, self.vel,force)
             # print("Tiempo: ",t)
+            # print("Posición carro: ",p_carro)
+            # print("Fuerza: ",force)
+            # print("Velocidad carro: ",v_carro)
             #print("angulo: ",theta*180/np.pi)
             #print("velocidad: ",self.vel)
             if abs(self.vel)>20:
