@@ -105,9 +105,9 @@ class fuzzy_logic():
         if self.tipo == 'pendulo':
             rules = [
                 ["Z", "PG","PG","PG","PG"],
-                ["PG","PG","PP","NG","PG"],
-                ["NG","PG","Z" ,"NG","PG"],
-                ["NG","PG","NP","NG","NG"],
+                ["Z","PG","PP","NG","PG"],
+                ["Z","PG","Z" ,"NG","Z"],
+                ["NG","PG","NP","NG","Z"],
                 ["NG","NG","NG","NG","Z" ]
             ]
         elif self.tipo == 'carrito':
