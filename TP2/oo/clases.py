@@ -51,7 +51,40 @@ class fuzzy_logic():
         self.fuerza_pp = vec_medio(0, 0.5*self.fmax, self.dom_f)
         self.fuerza_pg = vec_extremo(0.25*self.fmax, 0.5*self.fmax, self.dom_f,'der')
 
+    def plot_pertenencia(self):
+        fig, axs = plt.subplots(3, 1, figsize=(8, 12))
+        axs[0].plot(self.dom_pos, self.pos_z, label='Posición Z')
+        axs[0].plot(self.dom_pos, self.pos_np, label='Posición NP')
+        axs[0].plot(self.dom_pos, self.pos_ng, label='Posición NG')
+        axs[0].plot(self.dom_pos, self.pos_pp, label='Posición PP')
+        axs[0].plot(self.dom_pos, self.pos_pg, label='Posición PG')
+        axs[0].set_xlabel('Posición')
+        axs[0].set_ylabel('Pertenencia')
+        axs[0].set_title('Funciones de pertenencia de posición')
+        axs[0].legend()
 
+        axs[1].plot(self.dom_vel, self.vel_z, label='Velocidad Z')
+        axs[1].plot(self.dom_vel, self.vel_np, label='Velocidad NP')
+        axs[1].plot(self.dom_vel, self.vel_ng, label='Velocidad NG')
+        axs[1].plot(self.dom_vel, self.vel_pp, label='Velocidad PP')
+        axs[1].plot(self.dom_vel, self.vel_pg, label='Velocidad PG')
+        axs[1].set_xlabel('Velocidad')
+        axs[1].set_ylabel('Pertenencia')
+        axs[1].set_title('Funciones de pertenencia de velocidad')
+        axs[1].legend()
+
+        axs[2].plot(self.dom_f, self.fuerza_z, label='Fuerza Z')
+        axs[2].plot(self.dom_f, self.fuerza_np, label='Fuerza NP')
+        axs[2].plot(self.dom_f, self.fuerza_ng, label='Fuerza NG')
+        axs[2].plot(self.dom_f, self.fuerza_pp, label='Fuerza PP')
+        axs[2].plot(self.dom_f, self.fuerza_pg, label='Fuerza PG')
+        axs[2].set_xlabel('Fuerza')
+        axs[2].set_ylabel('Pertenencia')
+        axs[2].set_title('Funciones de pertenencia de fuerza')
+        axs[2].legend()
+
+        plt.tight_layout()
+        plt.show()
     def fuzzy(self, pos, vel):
         #fuzzificacion de las variables de entrada
 
