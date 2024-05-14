@@ -14,7 +14,7 @@ def main():
     carrito.func_pertenencia()
 
 
-    test1 = clases.pendulo(5, 0.001, 90, 0, 0,2,1,1)
+    test1 = clases.pendulo(5, 0.001, 45, 0, 0,2,1,1)
     #t_max, dt, angulo_inicial, velocidad_inicial, posicion_carro, fuerza, masa_carro, masa_pendulo
     test1.simular_pendulo(pendulo)
     # test1.graficar_en_hilo()
@@ -28,7 +28,7 @@ def main():
 
     multiprocessing.Process(
         target=front.graficar_pendulo, 
-        args=(test1.y, test1.posicion_carro,test1.x,test1.f,test1.velocidad_carro,"Pendulo",10)
+        args=(test1.y, test1.posicion_carro,test1.x,test1.f,test1.velocidad_carro,"Pendulo")
         ).start()
 
 
