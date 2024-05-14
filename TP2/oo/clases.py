@@ -2,7 +2,7 @@ from funciones import *
 import numpy as np
 from scipy import constants
 import matplotlib.pyplot as plt
-
+import threading
 
 class fuzzy_logic():
     def __init__(self, fmax,pmax,vmax,tipo,defuzzification='centroid'):
@@ -154,7 +154,7 @@ class fuzzy_logic():
         #self.fuerza = defuzz(self.dom_f,fuerza, self.defuzzification)
         # print("\n\nFuerza: ",self.fuerza)
 
-        return fuerza
+        return fuerza , self.fuerza
 
 
 class pendulo():
@@ -181,29 +181,23 @@ class pendulo():
         denominador = self.longitud_pendulo * (4/3 - (self.masa_pendulo * np.power(np.cos(theta), 2) / (self.masa_carro + self.masa_pendulo)))
         return numerador / denominador
     
-    def simular(self,obj,obj2):
+    def simular_pendulo_carro(self,obj,obj2):
         theta = (self.theta * np.pi) / 180
         v_carro = 0
         p_carro = 0
         m_t = self.masa_carro + self.masa_pendulo
 
         for t in self.x:
-            force1 = obj.fuzzy(theta*180/np.pi, self.vel)
-            force1_u=union(force1)
-            # if abs(max(force1[0]))>0.8:
-            if theta*180/np.pi<1 or theta*180/np.pi>-1:
-                # plt.plot(obj.dom_f,force1)
-                # plt.show()
-                force2 = obj2.fuzzy(p_carro, v_carro)
-                force2_u=union(force2)
-                # plt.plot(obj2.dom_f,force2)
-                # plt.show()
-                force3=union([force1_u,force2_u])
-                # plt.plot(obj.dom_f,force)
-                # plt.show()
-                force=defuzz(obj.dom_f,force3,'centroid')
-            else:  
-                force=defuzz(obj.dom_f,force1_u,'centroid')
+            force1,_ = obj.fuzzy(theta*180/np.pi, self.vel)
+            # plt.plot(obj.dom_f,force1)
+            # plt.show()
+            force2,_ = obj2.fuzzy(p_carro, v_carro)
+            # plt.plot(obj2.dom_f,force2)
+            # plt.show()
+            force3=union([force1,force2])
+            # plt.plot(obj.dom_f,force)
+            # plt.show()
+            force=defuzz(obj.dom_f,force3,'centroid')
             #force = (force1 + force2) / 2
             a_carro = -force / m_t
             v_carro = v_carro + a_carro * self.delta_t
@@ -230,8 +224,43 @@ class pendulo():
                 theta = theta + 2 * np.pi
             self.y.append(theta*180/np.pi)
 
-    def graficar(self):
+    def simular_pendulo(self,obj):
+        theta = (self.theta * np.pi) / 180
+        v_carro = 0
+        p_carro = 0
+        m_t = self.masa_carro + self.masa_pendulo
+
+        for t in self.x:
+            _,force = obj.fuzzy(theta*180/np.pi, self.vel)
+            a_carro = force / m_t
+            v_carro = v_carro + a_carro * self.delta_t
+            p_carro = p_carro + v_carro * self.delta_t + a_carro * np.power(self.delta_t, 2) / 2
+            self.velocidad_carro.append(v_carro)
+            self.posicion_carro.append(p_carro)
+            self.f.append(force)
+            self.acel = self.calcula_aceleracion(theta, self.vel,force)
+            # print("Tiempo: ",t)
+            #print("angulo: ",theta*180/np.pi)
+            #print("velocidad: ",self.vel)
+            if abs(self.vel)>20:
+                print("engine caput")
+                pass
+            # time.sleep(0.1)
+            self.vel = self.vel + self.acel * self.delta_t
+            theta = theta + self.vel * self.delta_t + self.acel * np.power(self.delta_t, 2) / 2
+            if theta > np.pi:
+                theta = theta - 2 * np.pi
+            elif theta < -np.pi:
+                theta = theta + 2 * np.pi
+            self.y.append(theta*180/np.pi)
+
+
+
+
+    def graficar(self,titulo):
         fig, ax = plt.subplots(2, 1, sharex=True)
+        # agregar el titulo al grafico
+        fig.suptitle(titulo)
         ax[0].plot(self.x, self.y)
         ax[0].set(ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
         ax[0].grid()
@@ -241,11 +270,3 @@ class pendulo():
         ax[1].grid()
 
         plt.show()
-        # fig, ax = plt.subplots()
-        # ax.plot(self.x, self.y)
-
-        # ax.set(xlabel='time (s)', ylabel='theta', title='Delta t = ' + str(self.delta_t) + " s")
-        # ax.grid()
-        
-        # plt.show()
-        
