@@ -7,7 +7,7 @@ import sys
 w = 1250
 h = 500
 
-def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocidad_carro, titulo):
+def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocidad_carro, titulo, f_ampl=50):
     pygame.mixer.quit()
     pygame.init()
     screen = pygame.display.set_mode((w, h))
@@ -39,8 +39,9 @@ def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocida
         if running:
             
             y_obj = 170
+            
             # Dibujar el carrito en la centro de la pantalla
-            carrito_x = w/2 + posiciones_carrito[index] * 50 # Multiplica por 10 para que se vea mejor
+            carrito_x = w/2 + posiciones_carrito[index] * f_ampl # Multiplica por 10 para que se vea mejor
             carrito_y = y_obj
             pygame.draw.rect(screen, (255, 0, 0), (carrito_x - 50, carrito_y - 25, 100, 50)) # pygame.draw.rect(screen, color, rect (x,y,width,height)
 
@@ -82,13 +83,17 @@ def graficar_pendulo(angulos_pendulo, posiciones_carrito,tiempo, fuerza,velocida
             text = font.render("Posición: " + str(posiciones_carrito[index]), True, (0, 0, 0))
             screen.blit(text, (50, 390))
 
-    
-            # dibujar una línea que represente el suelo con marcas cada 100 unidades
-            for i in range(-w//2, w//2, 50): # Dibuja una línea cada 100 unidades
+            if f_ampl >= 50:
+                t_font = 36
+            else:
+                t_font = f_ampl
+
+            # dibujar una línea que represente el suelo con marcas cada f_ampl
+            for i in range(-w//2, w//2, f_ampl): 
                 pygame.draw.line(screen, (0, 0, 0), (w//2 + i, 210), (w//2 + i, 220), 1) # pygame.draw.line(screen, color, start_pos, end_pos, width)
                 #dibujar debajo el valor de la posición
-                font = pygame.font.Font(None, 36) # pygame.font.Font(None, size)
-                text = font.render(str(int(i/50)), True, (0, 0, 0)) # pygame.font.Font.render(text, antialias, color, background=None) hace 
+                font = pygame.font.Font(None, t_font) # pygame.font.Font(None, size)
+                text = font.render(str(int(i/f_ampl)), True, (0, 0, 0)) # pygame.font.Font.render(text, antialias, color, background=None) hace 
                 text_width = text.get_width()
                 screen.blit(text, (w//2 + i - text_width//2, 220)) # pygame.Surface.blit(source, dest, area=None, special_flags = 0) Hace que el texto se vea centrado en la línea
             #dibujar una linea horizontal en la posición 205
