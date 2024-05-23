@@ -275,9 +275,9 @@ class pendulo():
             # print("Tiempo: ",t)
             #print("angulo: ",theta*180/np.pi)
             #print("velocidad: ",self.vel)
-            if abs(self.vel)>20:
-                print("engine caput")
-                pass
+            # if abs(self.vel)>20:
+            #     print("engine caput")
+            #     pass
             # time.sleep(0.1)
             self.vel = self.vel + self.acel * self.delta_t
             theta = theta + self.vel * self.delta_t + self.acel * np.power(self.delta_t, 2) / 2
