@@ -3,7 +3,7 @@ import numpy as np
 class NeuralNetwork:
     def __init__(self):
         self.initialize()
-
+        self.w1 = None # Weights for the first layer
     def initialize(self):
         # ======================== INITIALIZE NETWORK WEIGTHS AND BIASES =============================
         pass

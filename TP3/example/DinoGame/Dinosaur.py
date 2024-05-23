@@ -38,7 +38,7 @@ class Dinosaur(NeuralNetwork):
         self.duck_img = self.load_images(DUCKING)
         self.run_img = self.load_images(RUNNING)
         self.jump_img = self.load_images(JUMPING)
-        self.pesos = []
+        
 
         self.resetStatus()
         
