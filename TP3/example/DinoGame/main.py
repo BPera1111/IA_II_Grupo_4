@@ -38,7 +38,7 @@ def populate(population_size):
         R = random.randint(0, 250)
         G = random.randint(0, 250)
         if (R < 20 and G < 20):
-            B = 255
+            B = 250
         else:
             B = random.randint(0, 250)
         color = (R, G, B)
@@ -148,7 +148,8 @@ def gameScreen():
                     obstacle_params = obstacle.rect
                     dino_params = dino.dino_rect
                     # ========================== ACTUALIZAR LA FUNCIÓN 'think' CON LOS PARÁMETROS DE ENTRADA DE LA RED ===================
-                    dino.update(dino.think(obstacle_params.x, game_speed, obstacle_params.y+obstacle_params.height))
+                    # parametros: distancia al obstaculo, altura del obstaculo, velocidad del juego, y del dino
+                    dino.update(dino.think(obstacle_params.x, obstacle_params.y,obstacle_params.height, game_speed, dino_params.y))
                     # ====================================================================================================================
 
         if len(obstacles) == 0:
@@ -207,7 +208,7 @@ def menu():
     if playMode == 'm' or playMode == 'c' or playMode == 'a':
         player.resetStatus()
     elif playMode != 'm' and playMode != 'c' and playMode != 'a' and callUpdateNetwork:
-        updateNetwork(population)
+        updateNetwork(population,bestScore)
         callUpdateNetwork = False
         for dino in population:
             dino.resetStatus()
