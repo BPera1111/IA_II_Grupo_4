@@ -28,13 +28,14 @@ class Dinosaur(NeuralNetwork):
     Y_POS_DUCK = 340
     JUMP_VEL = 8.5
 
-    def __init__(self, id, mask_color = None, autoplay = False):
+    def __init__(self, id, gen, mask_color = None, autoplay = False):
         # As 'NeuralNetwork' serves as base class for the dinosaur, start its 'brain'
         super().__init__()
         
         self.id = id
         self.color = mask_color
         self.autoPlay = autoplay
+        self.gen = gen
         self.duck_img = self.load_images(DUCKING)
         self.run_img = self.load_images(RUNNING)
         self.jump_img = self.load_images(JUMPING)

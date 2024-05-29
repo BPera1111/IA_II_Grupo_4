@@ -42,14 +42,14 @@ def populate(population_size):
         else:
             B = random.randint(0, 250)
         color = (R, G, B)
-        population.append(Dinosaur(i, color, True))
+        population.append(Dinosaur(i, generation, color, True))
     return population
 
 # ======================== SELECT THE POPULATION NUMBER PLAYING AT THE SAME TIME ======================
 population_number = 40
 # =====================================================================================================
 population = populate(population_number)
-player = Dinosaur(0)
+player = Dinosaur(0, generation)
 callUpdateNetwork = False
 
 def gameScreen():
