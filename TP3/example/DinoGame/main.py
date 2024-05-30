@@ -35,21 +35,21 @@ BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 def populate(population_size):
     population = []
     for i in range(population_size):
-        R = random.randint(0, 250)
-        G = random.randint(0, 250)
+        R = random.randint(0, 200)
+        G = random.randint(0, 200)
         if (R < 20 and G < 20):
-            B = 250
+            B = 200
         else:
-            B = random.randint(0, 250)
+            B = random.randint(0, 200)
         color = (R, G, B)
-        population.append(Dinosaur(i, generation, color, True))
+        population.append(Dinosaur(i, color, True))
     return population
 
 # ======================== SELECT THE POPULATION NUMBER PLAYING AT THE SAME TIME ======================
 population_number = 40
 # =====================================================================================================
 population = populate(population_number)
-player = Dinosaur(0, generation)
+player = Dinosaur(0)
 callUpdateNetwork = False
 
 def gameScreen():
