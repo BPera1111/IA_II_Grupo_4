@@ -208,7 +208,7 @@ def menu():
     if playMode == 'm' or playMode == 'c' or playMode == 'a':
         player.resetStatus()
     elif playMode != 'm' and playMode != 'c' and playMode != 'a' and callUpdateNetwork:
-        population=updateNetwork(population,bestScore)
+        population=updateNetwork(population)
         callUpdateNetwork = False
         for dino in population:
             dino.resetStatus()
