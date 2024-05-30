@@ -6,7 +6,7 @@ class NeuralNetwork:
         self.b1 = None
         self.w2 = None
         self.b2 = None
-        self.initialize(5,10,3)
+        self.initialize(5,7,3)
 
     def initialize(self, input_size, hidden_size, output_size):
         # ======================== INITIALIZE NETWORK WEIGTHS AND BIASES =============================

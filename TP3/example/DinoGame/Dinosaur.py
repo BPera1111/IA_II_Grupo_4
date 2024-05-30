@@ -11,6 +11,7 @@ import os
 import glob
 from NeuralNetwork import NeuralNetwork
 import numpy as np
+import copy
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 # Bring images from assets
