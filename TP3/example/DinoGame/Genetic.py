@@ -6,14 +6,28 @@ def updateNetwork(population, bestScore):
     # ===================== CRUCE Y MUTACIÓN. LA ACTUALIZACIÓN DE LA POBLACIÓN SE APLICA EN LA MISMA VARIABLE ====================
 
     population = select_fittest(population)
-    
 
     for i in range(0, len(population), 2):
         # ===================== APLICAR CRUCE Y MUTACIÓN =====================
-        child_1, child_2 = evolve(population[0], population[1])
+        j = i // 2
+        if i < len(population)/2:
+            x = 0
+        else:
+            x = 1
+        child_1, child_2 = evolve(population[j], population[x])
+    
+        
         # ==================================================================
-        population[i] = child_1
-        population[i+1] = child_2
+        population[i].b1 = child_1[0]
+        population[i].b2 = child_1[1]
+        population[i].w1 = child_1[2]
+        population[i].w2 = child_1[3]
+        population[i+1].b1 = child_2[0]
+        population[i+1].b2 = child_2[1]
+        population[i+1].w1 = child_2[2]
+        population[i+1].w2 = child_2[3]
+
+    return population
 
 
 
@@ -37,13 +51,13 @@ def select_fittest(population):
 
 
 
-    return sorted_population[:2]
+    return sorted_population
 
 def evolve(element1, element2):
     # ===================== FUNCIÓN DE CRUCE Y MUTACIÓN =====================
     # Realizar el cruce y mutación de los atributos de los elementos
     cross_prob = 1
-    mut_prob = 0.25
+    mut_prob = 1
 
     if random.random() < cross_prob:
         b1_child_1,b1_child_2 = crossover(element1.b1, element2.b1)
@@ -86,7 +100,7 @@ def mutation(matrix):
     # Crear una matriz de mutación con valores aleatorios de una distribución normal
     mutation_matrix = np.random.randn(matrix.shape[0], matrix.shape[1])
     # Aplicar la mutación a la matriz original
-    mutated_matrix = matrix + mutation_matrix
+    mutated_matrix = matrix + mutation_matrix*1.5
     # Devolver la matriz mutada
     return mutated_matrix
 
