@@ -9,10 +9,12 @@ from deap import base, creator, tools, algorithms
 def updateNetwork(population,BestScore):
     new_population = Deap(population,BestScore)
     for i in range(len(population)):
-        population[i].b1 = new_population[i].b1
-        population[i].b2 = new_population[i].b2
-        population[i].w1 = new_population[i].w1
-        population[i].w2 = new_population[i].w2
+        population[i].b1 = new_population[i][0]
+        population[i].b2 = new_population[i][1]
+        population[i].b3 = new_population[i][2]
+        population[i].w1 = new_population[i][3]
+        population[i].w2 = new_population[i][4]
+        population[i].w3 = new_population[i][5]
     return population
 
 def select_fittest(population):
@@ -33,11 +35,14 @@ def Deap(population,BestScore):
     existing_population = population
 
     def create_individual_from_existing(element):
-        return creator.Individual([element.b1, element.b2, element.w1, element.w2, element.score])
+        return creator.Individual([element.b1, element.b2,element.b3, element.w1, element.w2,element.w3, element.score])
 
     toolbox.register("individual_existing", create_individual_from_existing)
 
-    toolbox.register("population_existing", tools.initRepeat, list, toolbox.individual_existing)
+    def create_population_existing(n, existing_population):
+        return [toolbox.individual_existing(element) for element in existing_population[:n]]
+
+    toolbox.register("population_existing", create_population_existing, existing_population=existing_population)
 
     # Generar una población a partir de la población existente
     new_population = toolbox.population_existing(n=len(existing_population))
@@ -48,7 +53,7 @@ def Deap(population,BestScore):
 
     # Definir la función de evaluación
     def evaluate(individual, BestScore):
-        return individual.score/BestScore,
+        return individual[6]/BestScore,
 
     toolbox.register("evaluate", evaluate , BestScore=BestScore)
 
@@ -73,29 +78,40 @@ def Deap(population,BestScore):
     new_population = elites
 
     # Cruzar los individuos seleccionados de manera aleatoria hasta completar la población el cruce se debe realizar siempre y la mutación solo en algunos casos
-    for i in range(1, len(offspring)*0.9, 2):
+    for i in range(1, int(len(offspring)*0.9), 2):
         a = random.randint(0, len(offspring)-1)
         b = random.randint(0, len(offspring)-1)
         child1, child2 = toolbox.mate(offspring[a], offspring[b])
+        if random.random() < MUTPB:
+            child1 = toolbox.mutate(child1)
+        elif random.random() < MUTPB:
+            child2 = toolbox.mutate(child2)
         new_population.append(child1)
         new_population.append(child2)
         del child1.fitness.values
         del child2.fitness.values
 
     # Aplicar la mutación a los individuos de la población
-    for mutant in new_population:
-        if random.random() < MUTPB:
-            toolbox.mutate(mutant)
-            del mutant.fitness.values
-    
+    # for mutant in new_population:
+    #     if random.random() < MUTPB:
+    #         mut = toolbox.mutate(mutant)
+    #         mutant[0] = mut[0]
+    #         mutant[1] = mut[1]
+    #         mutant[2] = mut[2]
+    #         mutant[3] = mut[3]
+    #         del mutant.fitness.values
+            # new_population.append(mut)
+
     return new_population
 
 def crossover(ind1,ind2):
-    B1_a,B1_b = cruce(ind1.b1, ind2.b1)
-    B2_a,B2_b = cruce(ind1.b2, ind2.b2)
-    W1_a,W1_b = cruce(ind1.w1, ind2.w1)
-    W2_a,W2_b = cruce(ind1.w2, ind2.w2)
-    return creator.Individual([B1_a,B2_a,W1_a,W2_a,0]), creator.Individual([B1_b,B2_b,W1_b,W2_b,0])
+    B1_a,B1_b = cruce(ind1[0], ind2[0])
+    B2_a,B2_b = cruce(ind1[1], ind2[1])
+    B3_a,B3_b = cruce(ind1[2], ind2[2])
+    W1_a,W1_b = cruce(ind1[3], ind2[3])
+    W2_a,W2_b = cruce(ind1[4], ind2[4])
+    W3_a,W3_b = cruce(ind1[5], ind2[5])
+    return creator.Individual([B1_a,B2_a,B3_a,W1_a,W2_a,W3_a,0]), creator.Individual([B1_b,B2_b,B3_b,W1_b,W2_b,W3_b,0])
 
 
 
@@ -118,7 +134,7 @@ def cruce(matrix1, matrix2):
     return new_matrix1, new_matrix2
 
 def mutation(ind):
-    return creator.Individual([mut(ind.b1),mut(ind.b2),mut(ind.w1),mut(ind.w2),0])
+    return creator.Individual([mut(ind[0]),mut(ind[1]),mut(ind[2]),mut(ind[3]),mut(ind[4]),mut(ind[5]),0])
 
 
 def mut(matrix):
