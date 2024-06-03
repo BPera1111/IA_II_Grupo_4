@@ -76,10 +76,14 @@ def Deap(population,BestScore):
 
     # Pasar los mejores individuos a la nueva generación
     new_population = elites
-
+    prob_cruce_elite = 0.8
     # Cruzar los individuos seleccionados de manera aleatoria hasta completar la población el cruce se debe realizar siempre y la mutación solo en algunos casos
     for i in range(1, int(len(offspring)*0.9), 2):
-        a = random.randint(0, len(offspring)-1)
+        # a = random.randint(0, len(offspring)-1)
+        if random.random() < prob_cruce_elite:
+            a = random.randint(0, len(elites)-1)
+        else:
+            a = random.randint(0, len(offspring)-1)
         b = random.randint(0, len(offspring)-1)
         child1, child2 = toolbox.mate(offspring[a], offspring[b])
         if random.random() < MUTPB:
