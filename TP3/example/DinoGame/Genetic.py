@@ -4,7 +4,7 @@ import pickle
 import copy
 from deap import base, creator, tools, algorithms
 
-
+elites_ant = None
 
 def updateNetwork(population,BestScore):
     new_population = Deap(population,BestScore)
@@ -25,6 +25,7 @@ def evolve(element1, element2):
 
 
 def Deap(population,BestScore):
+    global elites_ant
     # Definir el tipo de individuo y la población
     if "FitnessMax" not in creator.__dict__:
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -68,23 +69,37 @@ def Deap(population,BestScore):
     for ind, fit in zip(new_population, fitnesses):
         ind.fitness.values = fit
 
+    if not elites_ant==None:
+        fitnesses = list(map(toolbox.evaluate, elites_ant))
+        for ind, fit in zip(elites_ant, fitnesses):
+            ind.fitness.values = fit
+
     # Definir parámetros de la evolución
-    MUTPB,ELITPB = 0.5,0.1
+    MUTPB,ELITPB = 0.5,0.2
     # Seleccionar los mejores individuos de la población existente
     elites = tools.selBest(new_population, int(ELITPB * len(new_population)))
+
+    if not elites_ant==None:
+        the_best = elites+elites_ant
+        elites = tools.selBest(the_best, int(ELITPB * len(new_population)))
+        elites_ant = elites.copy()
+    else:
+        elites_ant = elites.copy()
+
+
     # Seleccionar los individuos que se cruzarán
     offspring = toolbox.select(new_population, len(new_population))
     # Clonar los individuos seleccionados para evitar referencias
     offspring = list(map(toolbox.clone, offspring))
 
     # Pasar los mejores individuos a la nueva generación
-    new_population = elites
+    new_population = elites.copy()
     prob_cruce_elite = 0.8
     # Cruzar los individuos seleccionados de manera aleatoria hasta completar la población el cruce se debe realizar siempre y la mutación solo en algunos casos
-    for i in range(1, int(len(offspring)*0.9), 2):
-        # a = random.randint(0, len(offspring)-1)
-        if random.random() < prob_cruce_elite:
-            a = random.randint(0, len(elites)-1)
+    for i in range(1, int(len(offspring)*(1-ELITPB)), 2):
+        e = random.randint(0, len(elites)-1)
+        if random.random() < elites[e].fitness.values[0]:
+            a = e
         else:
             a = random.randint(0, len(offspring)-1)
         b = random.randint(0, len(offspring)-1)
@@ -150,6 +165,6 @@ def mut(matrix):
     # Crear una matriz de mutación con valores aleatorios
     mutation_matrix = np.random.rand(matrix.shape[0], matrix.shape[1]) # Matriz de mutación con valores aleatorios entre 0 y 1 con distribución uniforme
     # Aplicar la mutación a la matriz original
-    mutated_matrix = matrix + mutation_matrix * 0.1  # Factor de escala ajustado
+    mutated_matrix = matrix + mutation_matrix *0.1 # Factor de escala ajustado
     # Devolver la matriz mutada
     return mutated_matrix

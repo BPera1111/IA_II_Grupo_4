@@ -1,5 +1,12 @@
 import numpy as np
 
+# l_x_obs = []
+# l_y_obs = []
+# l_h_obs = []
+# l_w_obs = []
+# l_speed = []
+# l_y_dino = []
+
 class NeuralNetwork:
     def __init__(self):
         self.w1 = None # Weights for the first layer
@@ -8,7 +15,7 @@ class NeuralNetwork:
         self.b2 = None
         self.w3 = None
         self.b3 = None
-        self.initialize(8,7,3)
+        self.initialize(8,16,3)
 
     def initialize(self, input_size, hidden_size, output_size):
         # ======================== INITIALIZE NETWORK WEIGTHS AND BIASES =============================
@@ -20,7 +27,21 @@ class NeuralNetwork:
         self.b3 = np.zeros((1, output_size)) # bias de las capas ocultas
         #np.random.randn genera una matriz de tamaño (input_size, hidden_size) con valores aleatorios de una distribución normal
 
-    def think(self, x_obs, y_obs, h_obs, speed, y_dino, bird, SmallCactus, LargeCactus):
+    def think(self, x_obs, y_obs, h_obs,w_obs, speed, y_dino, bird, SmallCactus, LargeCactus):
+        # global l_x_obs, l_y_obs, l_h_obs, l_w_obs, l_speed, l_y_dino
+         # ================================== NORMALIZADO =========================================
+        # l_x_obs.append(x_obs)
+        # l_y_obs.append(y_obs)
+        # l_h_obs.append(h_obs)
+        # l_w_obs.append(w_obs)
+        # l_speed.append(speed)
+        # l_y_dino.append(y_dino)
+        # print("x_obs: ",max(l_x_obs))
+        # print("y_obs: ",max(l_y_obs))
+        # print("h_obs: ",max(l_h_obs))
+        # print("w_obs: ",max(l_w_obs))
+        # print("speed: ",max(l_speed))
+        # print("y_dino: ",max(l_y_dino))
          # ================================== NORMALIZADO =========================================
         x_obs = x_obs / 1080 #ancho de la pantalla
         y_obs = (y_obs-20) / 230 #alto de la pantalla hasta el suelo
