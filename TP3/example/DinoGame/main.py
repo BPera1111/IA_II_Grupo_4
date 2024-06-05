@@ -46,7 +46,7 @@ def populate(population_size):
     return population
 
 # ======================== SELECT THE POPULATION NUMBER PLAYING AT THE SAME TIME ======================
-population_number = 400
+population_number = 100
 # =====================================================================================================
 population = populate(population_number)
 player = Dinosaur(0)
@@ -149,7 +149,18 @@ def gameScreen():
                     dino_params = dino.dino_rect
                     # ========================== ACTUALIZAR LA FUNCIÓN 'think' CON LOS PARÁMETROS DE ENTRADA DE LA RED ===================
                     # parametros: distancia al obstaculo, altura del obstaculo, velocidad del juego, y del dino
-                    dino.update(dino.think(obstacle_params.x, obstacle_params.y,obstacle_params.height, game_speed, dino_params.y))
+                    bird = 1 if isinstance(obstacle, Bird) else 0
+                    small_cactus = 1 if isinstance(obstacle, SmallCactus) else 0
+                    large_cactus = 1 if isinstance(obstacle, LargeCactus) else 0
+                    dino.update(dino.think(
+                        obstacle_params.x, 
+                        obstacle_params.y,
+                        obstacle_params.height, 
+                        game_speed, 
+                        dino_params.y,
+                        bird,
+                        small_cactus,
+                        large_cactus))
                     # ====================================================================================================================
 
         if len(obstacles) == 0:
@@ -198,7 +209,7 @@ def gameScreen():
             countSurviving()
             currentGeneration()
 
-        clock.tick(30)
+        clock.tick(100)
         pygame.display.update()
 
 def menu():
@@ -247,6 +258,10 @@ def menu():
         textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         SCREEN.blit(text, textRect)
         pygame.display.update()
+        
+        space_event = pygame.event.Event(pygame.KEYDOWN, {'key': pygame.K_SPACE})
+        pygame.event.post(space_event)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
