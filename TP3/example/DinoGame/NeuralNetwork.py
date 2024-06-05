@@ -44,7 +44,7 @@ class NeuralNetwork:
         # print("y_dino: ",max(l_y_dino))
          # ================================== NORMALIZADO =========================================
         x_obs = x_obs / 1080 #ancho de la pantalla
-        y_obs = (y_obs-20) / 230 #alto de la pantalla hasta el suelo
+        y_obs = (y_obs-10) / 230 #alto de la pantalla hasta el suelo
         h_obs = h_obs / 90 #altura del obstaculo
         speed = speed / 1000
         y_dino = y_dino / 390 #alto de la pantalla hasta el suelo
