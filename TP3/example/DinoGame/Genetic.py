@@ -26,8 +26,11 @@ def evolve(element1, element2):
 
 def Deap(population,BestScore):
     # Definir el tipo de individuo y la población
-    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    creator.create("Individual", list, fitness=creator.FitnessMax)
+    if "FitnessMax" not in creator.__dict__:
+        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+
+    if "Individual" not in creator.__dict__:
+        creator.create("Individual", list, fitness=creator.FitnessMax)
 
     toolbox = base.Toolbox()
     
