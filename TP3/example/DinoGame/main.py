@@ -7,6 +7,7 @@ except ImportError as err:
 
 import os
 import random
+import numpy as np
 from Dinosaur import Dinosaur
 from Cloud import Cloud
 from Bird import Bird
@@ -171,12 +172,22 @@ def gameScreen():
                         large_cactus))
                     # ====================================================================================================================
 
+        # if len(obstacles) == 0:
+        #     if random.randint(0, 2) == 0:
+        #         obstacles.append(SmallCactus(SCREEN_WIDTH, game_speed, obstacles))
+        #     elif random.randint(0, 2) == 1:
+        #         obstacles.append(LargeCactus(SCREEN_WIDTH, game_speed, obstacles))
+        #     elif random.randint(0, 2) < 1.5:
+        #         obstacles.append(Bird(SCREEN_WIDTH, game_speed, obstacles))
+
         if len(obstacles) == 0:
-            if random.randint(0, 2) == 0:
+            random_vector = np.random.rand(3)
+            a = np.argmax(random_vector)
+            if a == 0:
                 obstacles.append(SmallCactus(SCREEN_WIDTH, game_speed, obstacles))
-            elif random.randint(0, 2) == 1:
+            elif a == 1:
                 obstacles.append(LargeCactus(SCREEN_WIDTH, game_speed, obstacles))
-            elif random.randint(0, 2) < 1.5:
+            elif a == 2:
                 obstacles.append(Bird(SCREEN_WIDTH, game_speed, obstacles))
         
 
