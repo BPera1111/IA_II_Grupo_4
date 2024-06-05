@@ -176,7 +176,7 @@ def gameScreen():
                 obstacles.append(SmallCactus(SCREEN_WIDTH, game_speed, obstacles))
             elif random.randint(0, 2) == 1:
                 obstacles.append(LargeCactus(SCREEN_WIDTH, game_speed, obstacles))
-            elif random.randint(0, 2) == 2:
+            elif random.randint(0, 2) < 1.5:
                 obstacles.append(Bird(SCREEN_WIDTH, game_speed, obstacles))
         
 
