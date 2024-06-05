@@ -90,6 +90,13 @@ def gameScreen():
         textRect.center = (1000, 90)
         SCREEN.blit(text, textRect)
 
+    def bestScore_draw():
+        global bestScore
+        text = font.render("Mejor puntuación: " + str(bestScore), True, (0, 0, 0))
+        textRect = text.get_rect()
+        textRect.center = (950, 115)
+        SCREEN.blit(text, textRect)
+
     def background():
         global x_pos_bg, y_pos_bg
         image_width = BG.get_width()
@@ -113,7 +120,7 @@ def gameScreen():
         pygame.draw.rect(SCREEN, (255, 0, 0), player.dino_rect, 2)
         pygame.draw.rect(SCREEN, (0, 0, 255), obstacle_params, 2)
         pygame.display.update()
-        pygame.time.delay(1000)
+        pygame.time.delay(100)
         generation += 1
         if points > bestScore:
             bestScore = points
@@ -155,7 +162,8 @@ def gameScreen():
                     dino.update(dino.think(
                         obstacle_params.x, 
                         obstacle_params.y,
-                        obstacle_params.height, 
+                        obstacle_params.height,
+                        obstacle_params.width, 
                         game_speed, 
                         dino_params.y,
                         bird,
@@ -196,6 +204,7 @@ def gameScreen():
         elif (playMode != 'm' and playMode != 'c' and playMode != 'a' and count_alive(population) == 0):
             countSurviving()
             currentGeneration()
+            bestScore_draw()
             deathUpdates(last_dino, obstacle)
 
         background()
@@ -208,8 +217,9 @@ def gameScreen():
         if (playMode != 'm' and playMode != 'c' and playMode != 'a'):
             countSurviving()
             currentGeneration()
+            bestScore_draw()
 
-        clock.tick(100)
+        clock.tick(5000)
         pygame.display.update()
 
 def menu():
