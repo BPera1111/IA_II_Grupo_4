@@ -48,7 +48,8 @@ def populate(population_size):
     return population
 
 # ======================== SELECT THE POPULATION NUMBER PLAYING AT THE SAME TIME ======================
-population_number = 1000
+population_number = 1
+save = True
 # =====================================================================================================
 population = populate(population_number)
 player = Dinosaur(0)
@@ -238,15 +239,17 @@ def gameScreen():
         pygame.display.update()
 
 def menu():
-    global callUpdateNetwork, generation, bestScore, playMode, population, population_number,max_scores,history
+    global callUpdateNetwork, generation, bestScore, playMode, population, population_number,max_scores,history,save
     run = True
 
     if playMode == 'm' or playMode == 'c' or playMode == 'a':
         player.resetStatus()
     elif playMode != 'm' and playMode != 'c' and playMode != 'a' and callUpdateNetwork:
-
-        max_score =[dino.score for dino in population]
-        max_scores.append(max_score)
+        if not save:
+            max_score =[dino.score for dino in population]
+            max_scores.append(max_score)
+        else:
+            max_scores.append(population[0].score)
 
         population=updateNetwork(population, bestScore)
         callUpdateNetwork = False

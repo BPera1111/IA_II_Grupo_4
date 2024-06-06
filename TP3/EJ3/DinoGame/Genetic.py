@@ -5,17 +5,32 @@ import copy
 from deap import base, creator, tools, algorithms
 
 elites_ant = None
+save = True
 
 def updateNetwork(population,BestScore):
-    new_population = Deap(population,BestScore)
-    for i in range(len(population)):
-        population[i].b1 = new_population[i][0]
-        population[i].b2 = new_population[i][1]
-        population[i].b3 = new_population[i][2]
-        population[i].w1 = new_population[i][3]
-        population[i].w2 = new_population[i][4]
-        population[i].w3 = new_population[i][5]
-    return population
+    global save
+    
+    if not save:
+        new_population = Deap(population,BestScore)
+        for i in range(len(population)):
+            population[i].b1 = new_population[i][0]
+            population[i].b2 = new_population[i][1]
+            population[i].b3 = new_population[i][2]
+            population[i].w1 = new_population[i][3]
+            population[i].w2 = new_population[i][4]
+            population[i].w3 = new_population[i][5]
+        return population
+    else:
+        with open('goat_2040_4.pickle', 'rb') as f:
+            elit = pickle.load(f)
+        population[0].b1 = elit[0]
+        population[0].b2 = elit[1]
+        population[0].b3 = elit[2]
+        population[0].w1 = elit[3]
+        population[0].w2 = elit[4]
+        population[0].w3 = elit[5]
+        return population
+
 
 def select_fittest(population):
     pass
@@ -25,7 +40,7 @@ def evolve(element1, element2):
 
 
 def Deap(population,BestScore):
-    global elites_ant
+    global elites_ant, save
     # Definir el tipo de individuo y la población
     if "FitnessMax" not in creator.__dict__:
         creator.create("FitnessMax", base.Fitness, weights=(1.0,))
@@ -78,6 +93,8 @@ def Deap(population,BestScore):
     MUTPB,ELITPB,SUBELITE = 0.7,0.2,0.1
     # Seleccionar los mejores individuos de la población existente
     elites = tools.selBest(new_population, int(ELITPB * len(new_population)))
+    # Guardar en un .pickle el objeto elites[0]
+    
     subElite = tools.selBest(new_population, int(SUBELITE * len(new_population)))
     toolbox.register("evaluate_sub", evaluate , BestScore=subElite[0][6])
 
@@ -89,6 +106,9 @@ def Deap(population,BestScore):
         the_best = elites+elites_ant
         elites = tools.selBest(the_best, int(ELITPB * len(new_population)))
         elites_ant = elites.copy()
+        if not save:
+            with open('elite.pickle', 'wb') as f:
+                pickle.dump(elites_ant[0], f)
     else:
         elites_ant = elites.copy()
 
@@ -172,6 +192,12 @@ def mut(matrix):
     # Crear una matriz de mutación con valores aleatorios
     mutation_matrix = np.random.rand(matrix.shape[0], matrix.shape[1]) # Matriz de mutación con valores aleatorios entre 0 y 1 con distribución uniforme
     # Aplicar la mutación a la matriz original
-    mutated_matrix = matrix + mutation_matrix *0.1 # Factor de escala ajustado
-    # Devolver la matriz mutada
+    random_vector = np.random.rand(2)
+    a = np.argmax(random_vector)
+    if a == 0:
+        mutated_matrix = matrix + mutation_matrix *0.1 # Factor de escala ajustado
+    elif a == 1:
+        mutated_matrix = matrix - mutation_matrix *0.1 # Factor de escala ajustado
+    # mutated_matrix = matrix + mutation_matrix *0.1 # Factor de escala ajustado
+    # # Devolver la matriz mutada
     return mutated_matrix
