@@ -8,6 +8,8 @@ except ImportError as err:
 import os
 import random
 import numpy as np
+import matplotlib.pyplot as plt
+import threading
 from Dinosaur import Dinosaur
 from Cloud import Cloud
 from Bird import Bird
@@ -28,6 +30,8 @@ pygame.display.set_caption("DinoGame")
 generation = 1
 bestScore = 0
 playMode = "X"
+max_scores = []
+history = []
 
 imageCapture = ImageCapture(screen_spawn_position)
 
@@ -214,6 +218,7 @@ def gameScreen():
             countSurviving()
             currentGeneration()
             bestScore_draw()
+
             deathUpdates(last_dino, obstacle)
 
         background()
@@ -227,17 +232,22 @@ def gameScreen():
             countSurviving()
             currentGeneration()
             bestScore_draw()
+            
 
         clock.tick(5000)
         pygame.display.update()
 
 def menu():
-    global callUpdateNetwork, generation, bestScore, playMode, population, population_number
+    global callUpdateNetwork, generation, bestScore, playMode, population, population_number,max_scores,history
     run = True
 
     if playMode == 'm' or playMode == 'c' or playMode == 'a':
         player.resetStatus()
     elif playMode != 'm' and playMode != 'c' and playMode != 'a' and callUpdateNetwork:
+
+        max_score =[dino.score for dino in population]
+        max_scores.append(max_score)
+
         population=updateNetwork(population, bestScore)
         callUpdateNetwork = False
         for dino in population:
@@ -278,19 +288,36 @@ def menu():
         SCREEN.blit(text, textRect)
         pygame.display.update()
         
-        space_event = pygame.event.Event(pygame.KEYDOWN, {'key': pygame.K_SPACE})
-        pygame.event.post(space_event)
+
+        if generation > 1:
+            space_event = pygame.event.Event(pygame.KEYDOWN, {'key': pygame.K_SPACE})
+            pygame.event.post(space_event)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
+                if pygame.key.name(event.key) == 'q':
+                    run = False
                 if generation == 1:
                     playMode = pygame.key.name(event.key)
 
                     if playMode == 'm' or playMode == 'c' or playMode == 'a':
                         population = []
                 gameScreen()
+                
+def graph():
+    global max_scores, history
+    plt.ion()  # Turn on interactive mode
+    fig, ax = plt.subplots()
+    while True:
+        max = np.array(max_scores).flatten()
+        ax.clear()
+        ax.plot(max)
+        ax.set_xlabel('Generation')
+        ax.set_ylabel('Max Score')
+        ax.set_title('Max Score vs Generation')
+        plt.pause(1)
 
 def count_alive(population):
     alive = 0
@@ -300,4 +327,6 @@ def count_alive(population):
     return alive
 
 if __name__ == "__main__":
+    graph_thread = threading.Thread(target=graph, daemon=True)
+    graph_thread.start()
     menu()
