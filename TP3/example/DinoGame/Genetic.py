@@ -75,9 +75,15 @@ def Deap(population,BestScore):
             ind.fitness.values = fit
 
     # Definir parámetros de la evolución
-    MUTPB,ELITPB = 0.5,0.2
+    MUTPB,ELITPB,SUBELITE = 0.7,0.2,0.1
     # Seleccionar los mejores individuos de la población existente
     elites = tools.selBest(new_population, int(ELITPB * len(new_population)))
+    subElite = tools.selBest(new_population, int(SUBELITE * len(new_population)))
+    toolbox.register("evaluate_sub", evaluate , BestScore=subElite[0][6])
+
+    fitnesses = list(map(toolbox.evaluate_sub, subElite))
+    for ind, fit in zip(subElite, fitnesses):
+        ind.fitness.values = fit
 
     if not elites_ant==None:
         the_best = elites+elites_ant
@@ -93,15 +99,19 @@ def Deap(population,BestScore):
     offspring = list(map(toolbox.clone, offspring))
 
     # Pasar los mejores individuos a la nueva generación
-    new_population = elites.copy()
+    new_population = elites.copy() + subElite.copy()
     # Cruzar los individuos seleccionados de manera aleatoria hasta completar la población el cruce se debe realizar siempre y la mutación solo en algunos casos
-    for i in range(1, int(len(offspring)*(1-ELITPB)), 2):
+    for i in range(1, int(len(offspring)*(1-ELITPB-SUBELITE)), 2):
         e = random.randint(0, len(elites)-1)
         if random.random() < elites[e].fitness.values[0]:
             a = e
         else:
             a = random.randint(0, len(offspring)-1)
-        b = random.randint(0, len(offspring)-1)
+        se = random.randint(0, len(subElite)-1)
+        if random.random() < subElite[se].fitness.values[0]:
+            b = se
+        else:
+            b = random.randint(0, len(offspring)-1)
         child1, child2 = toolbox.mate(offspring[a], offspring[b])
         if random.random() < MUTPB:
             child1 = toolbox.mutate(child1)
@@ -159,8 +169,6 @@ def mutation(ind):
 
 
 def mut(matrix):
-    # Crear una matriz de mutación con valores aleatorios
-    mutation_matrix = np.random.rand(matrix.shape[0], matrix.shape[1])
     # Crear una matriz de mutación con valores aleatorios
     mutation_matrix = np.random.rand(matrix.shape[0], matrix.shape[1]) # Matriz de mutación con valores aleatorios entre 0 y 1 con distribución uniforme
     # Aplicar la mutación a la matriz original

@@ -36,18 +36,15 @@ BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 def populate(population_size):
     population = []
     for i in range(population_size):
-        R = random.randint(0, 200)
-        G = random.randint(0, 200)
-        if (R < 20 and G < 20):
-            B = 200
-        else:
-            B = random.randint(0, 200)
+        R = random.randint(0, 150)
+        G = random.randint(0, 150)
+        B = random.randint(0, 150)
         color = (R, G, B)
         population.append(Dinosaur(i, color, True))
     return population
 
 # ======================== SELECT THE POPULATION NUMBER PLAYING AT THE SAME TIME ======================
-population_number = 100
+population_number = 1000
 # =====================================================================================================
 population = populate(population_number)
 player = Dinosaur(0)
@@ -160,16 +157,17 @@ def gameScreen():
                     bird = 1 if isinstance(obstacle, Bird) else 0
                     small_cactus = 1 if isinstance(obstacle, SmallCactus) else 0
                     large_cactus = 1 if isinstance(obstacle, LargeCactus) else 0
-                    dino.update(dino.think(
-                        obstacle_params.x, 
-                        obstacle_params.y,
-                        obstacle_params.height,
-                        obstacle_params.width, 
-                        game_speed, 
-                        dino_params.y,
-                        bird,
-                        small_cactus,
-                        large_cactus))
+                    # dino.update(dino.think(
+                    #     obstacle_params.x, 
+                    #     obstacle_params.y,
+                    #     obstacle_params.height,
+                    #     obstacle_params.width, 
+                    #     game_speed, 
+                    #     dino_params.y,
+                    #     bird,
+                    #     small_cactus,
+                    #     large_cactus))
+                    dino.update(dino.think(obstacle_params,bird,small_cactus,large_cactus))
                     # ====================================================================================================================
 
         # if len(obstacles) == 0:
@@ -177,7 +175,7 @@ def gameScreen():
         #         obstacles.append(SmallCactus(SCREEN_WIDTH, game_speed, obstacles))
         #     elif random.randint(0, 2) == 1:
         #         obstacles.append(LargeCactus(SCREEN_WIDTH, game_speed, obstacles))
-        #     elif random.randint(0, 2) < 1.5:
+        #     elif random.randint(0, 2) == 2:
         #         obstacles.append(Bird(SCREEN_WIDTH, game_speed, obstacles))
 
         if len(obstacles) == 0:
