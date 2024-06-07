@@ -21,7 +21,7 @@ def updateNetwork(population,BestScore):
             population[i].w3 = new_population[i][5]
         return population
     else:
-        with open('goat_2040_4.pickle', 'rb') as f:
+        with open('goat_3485_10.pickle', 'rb') as f:
             elit = pickle.load(f)
         population[0].b1 = elit[0]
         population[0].b2 = elit[1]

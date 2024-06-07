@@ -32,6 +32,7 @@ class NeuralNetwork:
 
     def act(self, output):
         # ======================== USE THE ACTIVATION FUNCTION TO ACT =============================
+        # argmax seria la funcion de activacion de tipo RELU
         action =np.argmax(output) # Return the index of the maximum value in the output array
         if (action == 0):
             return "JUMP"
