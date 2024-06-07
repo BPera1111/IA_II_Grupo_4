@@ -235,7 +235,7 @@ def gameScreen():
             bestScore_draw()
             
 
-        clock.tick(5000)
+        clock.tick(30)
         pygame.display.update()
 
 def menu():
