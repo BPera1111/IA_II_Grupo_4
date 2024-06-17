@@ -72,6 +72,8 @@ def schedule_logaritmico(t, temperatura_inicial, factor_enfriamiento):
 bahia_inicio_descarga = [0, 0]
 productos = [[5, 6], [8, 3], [8, 9], [10, 6], [1, 3]] 
 
+[[10, 6], [8, 3], [8, 9], [5, 6], [1, 3]]
+
 # [0, 0] ,[5, 6], [8, 3], [10, 6], [1, 3] 
 
 #Se crea el vector picking agregando al vector de productos la posicion

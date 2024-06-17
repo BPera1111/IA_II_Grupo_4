@@ -142,9 +142,6 @@ def schedule_exponencial(t, temperatura_inicial, factor_enfriamiento):
 def schedule_lineal(t, temperatura_inicial, iteraciones):
     return temperatura_inicial * (1 - t / iteraciones)
 
-
-#def schedule_logaritmico(t, temperatura_inicial, factor_enfriamiento):
-#    return temperatura_inicial / math.log(t + 1, factor_enfriamiento)
 def schedule_logaritmico(t, temperatura_inicial, factor_enfriamiento):
     if t == 0:
         return temperatura_inicial
